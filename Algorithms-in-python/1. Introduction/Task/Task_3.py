@@ -21,11 +21,8 @@ start = input('От: ')
 stop = input('До: ')
 
 if select == '1':
-    rand_result = rd.randint(int(start), int(stop))
-    print(f'Ваш результат: {rand_result}')
+    print(f'Ваш результат: {rd.randint(int(start), int(stop))}')
 elif select == '2':
-    rand_result = rd.uniform(float(start), float(stop))
-    print(f'Ваш результат: {rand_result:.3}')
+    print(f'Ваш результат: {rd.uniform(float(start), float(stop)):.3}')
 elif select == '3':
-    rand_result = rd.randint(ord(start), ord(stop))
-    print(f'Ваш результат: {chr(rand_result)}')
+    print(f'Ваш результат: {chr(rd.randint(ord(start), ord(stop)))}')
