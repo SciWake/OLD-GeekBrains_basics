@@ -23,7 +23,7 @@ while indication != '0':
         elif indication == '*':
             print(a * b)
         elif indication == '/':
-            if a == 0:
+            if b == 0:
                 print('Ошибка деления на 0')
                 continue
             print(a / b)
