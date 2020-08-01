@@ -3,9 +3,6 @@ import sys
 
 mass = [1, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 6]
 
-print(f'mass = {sys.getsizeof(mass)}')
-# mass = 76
-
 count_numbers = {}
 number = count = 0
 
@@ -18,24 +15,47 @@ for i in mass:
         count = count_numbers[i]
         number = i
 
-print(f'count_numbers = {sys.getsizeof(count_numbers)}')
-# count_numbers = 196
-print(f'number = {sys.getsizeof(number)}')
-# number = 14
-print(f'count = {sys.getsizeof(count)}')
-# count = 14
-
 print(f'Число {number} встречается {count} раз(a)')
-
-print(sys.version, sys.platform)
-
-# 3.8.3 (tags/v3.8.3:6f8c832, May 13 2020, 22:20:19) [MSC v.1925 32 bit (Intel)] win32
 
 '''
 Проведя анализ получаем такие рещультаты:
-# mass = 76
-# count_numbers = 196
-# number = 14
-# count = 14
+3.8.3 (tags/v3.8.3:6f8c832, May 13 2020, 22:20:19) [MSC v.1925 32 bit (Intel)] win32
+ type = <class 'tuple'>, size = 36, object = ([1, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 6], {1: 3, 2: 4, 3: 1, 4: 1, 5: 2, 6: 1}, 2, 4)
+	 type = <class 'list'>, size = 76, object = [1, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 6]
+		 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 3
+		 type = <class 'int'>, size = 14, object = 4
+		 type = <class 'int'>, size = 14, object = 5
+		 type = <class 'int'>, size = 14, object = 5
+		 type = <class 'int'>, size = 14, object = 6
+	 type = <class 'dict'>, size = 196, object = {1: 3, 2: 4, 3: 1, 4: 1, 5: 2, 6: 1}
+		 type = <class 'tuple'>, size = 28, object = (1, 3)
+			 type = <class 'int'>, size = 14, object = 1
+			 type = <class 'int'>, size = 14, object = 3
+		 type = <class 'tuple'>, size = 28, object = (2, 4)
+			 type = <class 'int'>, size = 14, object = 2
+			 type = <class 'int'>, size = 14, object = 4
+		 type = <class 'tuple'>, size = 28, object = (3, 1)
+			 type = <class 'int'>, size = 14, object = 3
+			 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'tuple'>, size = 28, object = (4, 1)
+			 type = <class 'int'>, size = 14, object = 4
+			 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'tuple'>, size = 28, object = (5, 2)
+			 type = <class 'int'>, size = 14, object = 5
+			 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'tuple'>, size = 28, object = (6, 1)
+			 type = <class 'int'>, size = 14, object = 6
+			 type = <class 'int'>, size = 14, object = 1
+	 type = <class 'int'>, size = 14, object = 2
+	 type = <class 'int'>, size = 14, object = 4
+300 - количество памяти
+
 В текущей реализации много памяти для подсчёта требует словарь. Исправим это в следующей реализации
 '''

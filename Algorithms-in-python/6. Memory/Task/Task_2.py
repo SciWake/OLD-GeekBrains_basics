@@ -1,11 +1,8 @@
 import sys
 
 mass = [1, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 6]
-print(f'mass = {sys.getsizeof(mass)}')
-# mass = 76
+
 N = len(mass)
-print(f'N = {sys.getsizeof(N)}')
-# N = 14
 num = mass[0]
 max_frq = 1
 
@@ -23,17 +20,27 @@ if max_frq > 1:
 else:
     print('Все элементы уникальны')
 
-print(f'num = {sys.getsizeof(num)}')
-# num = 14
-print(f'max_frq = {sys.getsizeof(max_frq)}')
-# max_frq = 14
-
 '''
 Проведя анализ получаем такие рещультаты:
-# mass = 76
-# N = 14
-# num = 14
-# max_frq = 14
+3.8.3 (tags/v3.8.3:6f8c832, May 13 2020, 22:20:19) [MSC v.1925 32 bit (Intel)] win32
+ type = <class 'tuple'>, size = 36, object = ([1, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 6], 12, 2, 4)
+	 type = <class 'list'>, size = 76, object = [1, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 6]
+		 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'int'>, size = 14, object = 1
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 2
+		 type = <class 'int'>, size = 14, object = 3
+		 type = <class 'int'>, size = 14, object = 4
+		 type = <class 'int'>, size = 14, object = 5
+		 type = <class 'int'>, size = 14, object = 5
+		 type = <class 'int'>, size = 14, object = 6
+	 type = <class 'int'>, size = 14, object = 12
+	 type = <class 'int'>, size = 14, object = 2
+	 type = <class 'int'>, size = 14, object = 4
+118 - количество памяти
 
 В этой реализации мы избавились от словаря, что позволило уменьшить потребление памяти. Если массив будет больше, 
 то потребление памяти увеличится  у переменной mass. Первая задача будет требовать ещё больше места под словарь, 
