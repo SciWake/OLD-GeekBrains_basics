@@ -1,6 +1,6 @@
-# Генерация массива
 import random
 
+# Генерация массива
 size = 10
 array = [i for i in range(size)]
 random.shuffle(array)
