@@ -6,13 +6,6 @@ random.shuffle(array)
 print(array)
 
 
-def median(array, pivot_fn=random.choice):
-    if len(array) % 2 == 1:
-        return quickselect(array, len(array) / 2, pivot_fn)
-    else:
-        return 0.5 * (quickselect(array, len(array) / 2 - 1, pivot_fn) + quickselect(array, len(array) / 2, pivot_fn))
-
-
 def quickselect(l, k, pivot_fn):
     if len(l) == 1:
         assert k == 0
@@ -37,6 +30,13 @@ def quickselect(l, k, pivot_fn):
         return pivots[0]
     else:
         return quickselect(highs, k - len(lows) - len(pivots), pivot_fn)
+
+
+def median(array, pivot_fn=random.choice):
+    if len(array) % 2 == 1:
+        return quickselect(array, len(array) / 2, pivot_fn)
+    else:
+        return 0.5 * (quickselect(array, len(array) / 2 - 1, pivot_fn) + quickselect(array, len(array) / 2, pivot_fn))
 
 
 print(median(array))
