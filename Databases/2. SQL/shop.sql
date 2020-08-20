@@ -6,7 +6,7 @@ CREATE TABLE catalogs (
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-  id INT UNSIGNED,
+  id INT UNSIGNED NOT NULL,
   name VARCHAR(255) COMMENT 'Имя покупателя',
   brithday_at DATE COMMENT 'Дата рождения',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -49,6 +49,7 @@ CREATE TABLE discounts (
   product_id INT UNSIGNED,
   discount FLOAT UNSIGNED COMMENT 'Величина скидки от 0.0 до 1.0',
   started_at DATETIME,
+  finished_at DATETIME,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) COMMENT = 'Скидки';
