@@ -123,3 +123,22 @@ UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'audio
 
 -- Проверяем замену
 SELECT * FROM media;
+
+
+-- profiles
+-- Анализируем данные
+SELECT * FROM profiles LIMIT 10;
+
+-- Смотрим структуру профилей
+DESC profiles;
+
+-- Вывод id, где медиафайлы являются фотографиями
+SELECT id FROM media 
+  WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo');
+
+-- Профили где стобце photo_id не ссылается на фотографию
+SELECT * FROM profiles 
+  WHERE photo_id NOT IN
+    (SELECT id FROM media 
+       WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo'));
+       
