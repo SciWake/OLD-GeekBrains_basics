@@ -74,6 +74,9 @@ SELECT * FROM media_types;
 -- Анализируем данные
 SELECT * FROM media LIMIT 10;
 
+-- Смотрим структуру таблицы медиаконтента 
+DESC media_types;
+
 -- Переименуем столбец пути к файлу 
 ALTER TABLE media RENAME COLUMN filename TO filepath;
 
@@ -109,3 +112,14 @@ UPDATE media SET metadata = CONCAT('{"owner":"',
 -- Возвращаем столбцу метеданных правильный тип
 ALTER TABLE media MODIFY COLUMN metadata JSON;
 
+-- Проверяем замену
+SELECT * FROM media;
+
+-- Исправим значения в столбце media_type_id, установим соответствие jpeg - photo, txt - text...
+UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'photo') WHERE filepath LIKE '%jpeg';
+UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'video') WHERE filepath LIKE '%MP4';
+UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'text') WHERE filepath LIKE '%txt';
+UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'audio') WHERE filepath LIKE '%MP3';
+
+-- Проверяем замену
+SELECT * FROM media;
