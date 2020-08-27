@@ -48,25 +48,20 @@ SELECT COUNT(*) FROM messages WHERE updated_at < created_at;
 -- Выводим ошибочные данные
 SELECT * FROM messages WHERE updated_at < created_at;
 
--- Создаём временную таблицу для сохранения некорректной даты
-CREATE TEMPORARY TABLE updated_date (
-  created_at DATETIME,
-  updated_at DATETIME
-);
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `messages` SELECT * FROM `messages` `t2` 
+  WHERE `updated_at` < `created_at` 
+    ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
 
--- Заполняем временную таблицу необходимыми данными
-INSERT INTO updated_date (created_at, updated_at) SELECT created_at, updated_at FROM messages WHERE updated_at < created_at;
+-- Проверим стобцы created_at and updated_at
+SELECT COUNT(*) FROM messages WHERE updated_at < created_at;
+-- 0
 
--- Выполняем проверку, что заполнение произошло успешно
-SELECT * FROM updated_date;
 
--- Проверяем количестно новых дат, их должно быть 998
-SELECT COUNT(*) FROM updated_date;
--- 998
+-- media_types
+-- Смотрим структуру таблицы медиаконтента 
+DESC media_types;
 
-UPDATE messages SET 
-  updated_at = (SELECT created_at FROM updated_date),
-  created_at = (SELECT updated_at FROM updated_date)
-  WHERE updated_at < created_at;
+-- Анализируем типы медиаконтента
+SELECT * FROM media_types;
 
-SELECT * FROM profiles;
