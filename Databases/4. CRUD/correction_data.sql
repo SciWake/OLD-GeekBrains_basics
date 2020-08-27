@@ -65,3 +65,29 @@ DESC media_types;
 -- Анализируем типы медиаконтента
 SELECT * FROM media_types;
 
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `media_types` SELECT * FROM `media_types` `t2` 
+  WHERE `updated_at` < `created_at` 
+    ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
+    
+-- Исправим значения в таблицы name
+-- Создаём временную таблицу
+CREATE TEMPORARY TABLE extensions (name VARCHAR(10));
+
+-- Добалвяем необходимые значения таблицу
+INSERT INTO extensions VALUES ('jpeg'), ('MP3'), ('MOV'), ('txt');
+
+
+-- media
+SELECT * FROM media;
+
+-- Заполняем метаданные
+UPDATE media SET metadata = CONCAT('{"owner":"', 
+  (SELECT CONCAT(first_name, ' ', last_name) FROM users WHERE id = user_id),
+  '"}');
+
+-- Возвращаем столбцу метеданных правильный тип
+ALTER TABLE media MODIFY COLUMN metadata JSON;
+
+
+-- Видим ошибки в стобце metadata
