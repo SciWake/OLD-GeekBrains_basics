@@ -153,14 +153,14 @@ SELECT * FROM
     (SELECT id FROM media 
        WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo')));
 
--- Теперь можно воспользоваться данными id медиафайлов для заполнения ошибочных значений в таблице profiles в столбце photo_id
-
 -- Профили где стобце photo_id не ссылается на фотографию
 SELECT * FROM profiles
   WHERE photo_id NOT IN
     (SELECT id FROM media 
        WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo'));
-       
+
+-- Теперь можно воспользоваться данными id медиафайлов для заполнения ошибочных значений в таблице profiles в столбце photo_id
+-- Данная задача остаётся на доработку в будущем
 
 -- Заменяем стоблцы местами, где updated_at больше чем created_at
 INSERT INTO `profiles` SELECT * FROM `profiles` `t2` 
@@ -170,3 +170,17 @@ INSERT INTO `profiles` SELECT * FROM `profiles` `t2`
 -- Выполняем проверку
 SELECT COUNT(*) FROM profiles WHERE updated_at < created_at;
 -- 0
+
+-- friendship_statuses
+-- Анализируем данные 
+SELECT * FROM friendship_statuses;
+
+-- Исправим значения name в таблице
+UPDATE friendship_statuses SET name = 'Requested' WHERE id = 1; 
+UPDATE friendship_statuses SET name = 'Confirmed' WHERE id = 2; 
+UPDATE friendship_statuses SET name = 'Rejected' WHERE id = 3;
+
+-- Проверяем данные 
+SELECT * FROM friendship_statuses;
+
+
