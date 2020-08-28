@@ -226,5 +226,27 @@ SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
 -- Общий вывод данных для оценки 
 SELECT * FROM friendship;
 
+-- communities
+-- Анализируем данные
+SELECT * FROM communities;
+
+-- Смотрим структуру таблицы групп
+DESC communities;
+
+SELECT COUNT(*) FROM communities WHERE updated_at < created_at;
+-- 8
+
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `communities` SELECT * FROM `communities` `t2` 
+  WHERE `updated_at` < `created_at` 
+    ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
+
+-- Выполняем проверку
+SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
+-- 0
+
+-- Общий вывод данных для оценки 
+SELECT * FROM communities;
 
 
+-- communities_users
