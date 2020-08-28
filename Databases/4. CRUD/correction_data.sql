@@ -246,7 +246,14 @@ SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
 -- 0
 
 -- Общий вывод данных для оценки 
-SELECT * FROM communities;
+SELECT * FROM communities_users;
 
 
 -- communities_users
+-- Анализируем данные
+SELECT * FROM communities_users;
+
+-- Смотрим структуру таблицы групп
+DESC communities;
+
+-- В данной таблице всё хорошо
