@@ -184,3 +184,47 @@ UPDATE friendship_statuses SET name = 'Rejected' WHERE id = 3;
 SELECT * FROM friendship_statuses;
 
 
+-- friendship
+-- Анализируем данные
+SELECT * FROM friendship LIMIT 10;
+
+-- Смотрим структуру таблицы дружбы
+DESC friendship;
+
+-- Поиск необычных друзей, где пользователь сам себе друг
+SELECT COUNT(*) FROM friendship WHERE friend_id = user_id;
+-- 4
+
+-- Исправляем случай когда user_id = friend_id
+UPDATE friendship SET friend_id = friend_id + 1 WHERE user_id = friend_id;
+
+SELECT COUNT(*) FROM friendship WHERE updated_at < created_at;
+-- 565
+
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `friendship` SELECT * FROM `friendship` `t2` 
+  WHERE `updated_at` < `created_at` 
+    ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
+
+-- Выполняем проверку
+SELECT COUNT(*) FROM friendship WHERE updated_at < created_at;
+-- 0
+
+-- Замениа столбцов, когда время отправления приглашения дружить отправлено позже чем приятно приглашение
+SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
+-- 606
+
+-- Заменяем стоблцы местами, где requested_at больше чем confirmed_at
+INSERT INTO `friendship` SELECT * FROM `friendship` `t2` 
+  WHERE `requested_at` > `confirmed_at` 
+    ON DUPLICATE KEY UPDATE `confirmed_at` = `t2`.`requested_at`, `requested_at` = `t2`.`confirmed_at`;
+    
+-- Выполняем проверку
+SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
+-- 0
+
+-- Общий вывод данных для оценки 
+SELECT * FROM friendship;
+
+
+
