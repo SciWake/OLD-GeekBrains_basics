@@ -136,9 +136,37 @@ DESC profiles;
 SELECT id FROM media 
   WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo');
 
--- Профили где стобце photo_id не ссылается на фотографию
+-- Профили где стобце photo_id ссылается на фотографию
 SELECT * FROM profiles 
+  WHERE photo_id IN
+    (SELECT id FROM media 
+       WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo'));
+
+-- Запрос возвращает id из таблицы media где media_type_id = photo (1), котоыре не используются пользователями в качестве фотографии
+SELECT * FROM 
+  (SELECT id AS all_photo_id FROM media 
+    WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo')) AS tab1 
+  WHERE all_photo_id NOT IN
+  -- id фотографий которые используются пользователями
+  (SELECT photo_id FROM profiles 
+  WHERE photo_id IN
+    (SELECT id FROM media 
+       WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo')));
+
+-- Теперь можно воспользоваться данными id медиафайлов для заполнения ошибочных значений в таблице profiles в столбце photo_id
+
+-- Профили где стобце photo_id не ссылается на фотографию
+SELECT * FROM profiles
   WHERE photo_id NOT IN
     (SELECT id FROM media 
        WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'photo'));
        
+
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `profiles` SELECT * FROM `profiles` `t2` 
+  WHERE `updated_at` < `created_at` 
+    ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
+
+-- Выполняем проверку
+SELECT COUNT(*) FROM profiles WHERE updated_at < created_at;
+-- 0
