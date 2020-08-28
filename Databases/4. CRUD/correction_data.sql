@@ -171,6 +171,23 @@ INSERT INTO `profiles` SELECT * FROM `profiles` `t2`
 SELECT COUNT(*) FROM profiles WHERE updated_at < created_at;
 -- 0
 
+-- Данные где дата рождения пользователя больше чем дата регистрации
+SELECT COUNT(*) FROM profiles WHERE created_at < birthday;
+-- 35 
+
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `profiles` SELECT * FROM `profiles` `t2` 
+  WHERE `created_at` < `birthday` 
+    ON DUPLICATE KEY UPDATE `birthday` = `t2`.`created_at`, `created_at` = `t2`.`birthday`;
+
+-- Проверяем данные
+SELECT COUNT(*) FROM profiles WHERE created_at < birthday;
+-- 0
+
+-- Общий вывод данных для оценки 
+SELECT * FROM profiles;
+
+
 -- friendship_statuses
 -- Анализируем данные 
 SELECT * FROM friendship_statuses;
