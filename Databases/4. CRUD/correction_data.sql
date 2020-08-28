@@ -15,7 +15,7 @@ DESC users;
 -- Приводим в порядок временные метки
 UPDATE users SET updated_at = NOW() WHERE updated_at < created_at;
 
--- Выполняем проверку
+-- Проверяем данные
 SELECT * FROM users WHERE updated_at < created_at;
 
 
@@ -35,7 +35,7 @@ SELECT COUNT(*) FROM messages WHERE from_user_id = to_user_id;
 SELECT COUNT(*) FROM messages WHERE updated_at < created_at;
 -- 998
 
--- Выводим ошибочные данные
+-- Данные, где дата обновление данных произошло быстрее чем их создание
 SELECT * FROM messages WHERE updated_at < created_at;
 
 -- Заменяем стоблцы местами, где updated_at больше чем created_at
@@ -66,7 +66,7 @@ UPDATE media_types SET name = 'video' WHERE id = 2;
 UPDATE media_types SET name = 'text' WHERE id = 3; 
 UPDATE media_types SET name = 'audio' WHERE id = 4; 
 
--- Выполняем проверку
+-- Проверяем данные
 SELECT * FROM media_types;
 
 
@@ -86,7 +86,7 @@ CREATE TEMPORARY TABLE extensions (name VARCHAR(10));
 -- Заполняем значениями
 INSERT INTO extensions VALUES ('jpeg'), ('MP3'), ('txt'), ('MP4');
 
--- Проверяем
+-- Проверяем данные
 SELECT * FROM extensions;
 
 -- Обновляем ссылку на файл
@@ -98,7 +98,7 @@ UPDATE media SET filepath = CONCAT(
   (SELECT name FROM extensions ORDER BY RAND() LIMIT 1)
 );
 
--- Проверяем замену
+-- Проверяем данные
 SELECT * FROM media;
 
 -- Обновляем размер файлов
@@ -112,7 +112,7 @@ UPDATE media SET metadata = CONCAT('{"owner":"',
 -- Возвращаем столбцу метеданных правильный тип
 ALTER TABLE media MODIFY COLUMN metadata JSON;
 
--- Проверяем замену
+-- Проверяем данные
 SELECT * FROM media;
 
 -- Исправим значения в столбце media_type_id, установим соответствие jpeg - photo, txt - text...
@@ -121,7 +121,7 @@ UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'video
 UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'text') WHERE filepath LIKE '%txt';
 UPDATE media SET media_type_id = (SELECT id FROM media_types WHERE name = 'audio') WHERE filepath LIKE '%MP3';
 
--- Проверяем замену
+-- Проверяем данные
 SELECT * FROM media;
 
 
@@ -167,11 +167,11 @@ INSERT INTO `profiles` SELECT * FROM `profiles` `t2`
   WHERE `updated_at` < `created_at` 
     ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
 
--- Выполняем проверку
+-- Проверяем данные
 SELECT COUNT(*) FROM profiles WHERE updated_at < created_at;
 -- 0
 
--- Данные где дата рождения пользователя больше чем дата регистрации
+-- Данные, где дата обновление данных произошло быстрее чем их создание
 SELECT COUNT(*) FROM profiles WHERE created_at < birthday;
 -- 35 
 
@@ -215,6 +215,7 @@ SELECT COUNT(*) FROM friendship WHERE friend_id = user_id;
 -- Исправляем случай когда user_id = friend_id
 UPDATE friendship SET friend_id = friend_id + 1 WHERE user_id = friend_id;
 
+-- Данные, где дата обновление данных произошло быстрее чем их создание
 SELECT COUNT(*) FROM friendship WHERE updated_at < created_at;
 -- 565
 
@@ -223,7 +224,7 @@ INSERT INTO `friendship` SELECT * FROM `friendship` `t2`
   WHERE `updated_at` < `created_at` 
     ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
 
--- Выполняем проверку
+-- Проверяем данные
 SELECT COUNT(*) FROM friendship WHERE updated_at < created_at;
 -- 0
 
@@ -236,12 +237,13 @@ INSERT INTO `friendship` SELECT * FROM `friendship` `t2`
   WHERE `requested_at` > `confirmed_at` 
     ON DUPLICATE KEY UPDATE `confirmed_at` = `t2`.`requested_at`, `requested_at` = `t2`.`confirmed_at`;
     
--- Выполняем проверку
+-- Проверяем данные
 SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
 -- 0
 
 -- Общий вывод данных для оценки 
 SELECT * FROM friendship;
+
 
 -- communities
 -- Анализируем данные
@@ -250,6 +252,7 @@ SELECT * FROM communities;
 -- Смотрим структуру таблицы групп
 DESC communities;
 
+-- Данные, где дата обновление данных произошло быстрее чем их создание
 SELECT COUNT(*) FROM communities WHERE updated_at < created_at;
 -- 8
 
@@ -258,7 +261,7 @@ INSERT INTO `communities` SELECT * FROM `communities` `t2`
   WHERE `updated_at` < `created_at` 
     ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
 
--- Выполняем проверку
+-- Проверяем данные
 SELECT COUNT(*) FROM friendship WHERE requested_at > confirmed_at;
 -- 0
 
