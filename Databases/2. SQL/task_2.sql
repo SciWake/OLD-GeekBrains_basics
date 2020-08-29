@@ -7,7 +7,7 @@
 -- SERIAL == BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
 USE shop;
 
--- Создаём таблицу каталог
+-- Создаём таблицу catalogs
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs (
   id SERIAL PRIMARY KEY,
@@ -72,4 +72,52 @@ CREATE TABLE media_types (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "Время создания строки",  
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Время обновления строки"
 ) COMMENT "Типы медиафайлов";
-  
+
+
+/*
+3. В учебной базе данных shop присутствует таблица catalogs. Пусть в базе данных sample имеется таблица cat, 
+в которой могут присутствовать строки с такими же первичными ключами. Напишите запрос, который копирует данные 
+из таблицы catalogs в таблицу cat, при этом для записей с конфликтующими первичными ключами в таблице cat 
+должна производиться замена значениями из таблицы catalogs.
+*/
+-- Выбираем требуемую базу данных
+USE shop;
+
+-- Создаём таблицу catalogs
+DROP TABLE IF EXISTS catalogs;
+CREATE TABLE catalogs (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Название раздела'
+) COMMENT = 'Разделы интернет-магазина';
+
+-- Заполняем данными
+INSERT INTO catalogs VALUES
+  (DEFAULT, 'Процессоры'),
+  (DEFAULT, 'Мат.платы'),
+  (DEFAULT, 'Видеокарты');
+
+-- Проверим содержание таблицы
+SELECT * FROM catalogs;
+
+
+-- Выбираем требуемую базу данных
+USE sample;
+
+-- Создаём таблицу cat
+DROP TABLE IF EXISTS cat;
+CREATE TABLE cat (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Название раздела'
+) COMMENT = 'Разделы интернет-магазина';
+
+-- Заполняем данными
+INSERT INTO cat VALUES (DEFAULT, 'intel');
+
+-- Проверим содержание таблицы
+SELECT * FROM cat;
+
+-- Копирование данных из базы данных shop.catalogs в базу данных sample.cat
+INSERT INTO sample.cat SELECT id, name FROM shop.catalogs ON DUPLICATE KEY UPDATE name = VALUES(name);
+
+-- Проверим содержание таблицы
+SELECT * FROM cat;
