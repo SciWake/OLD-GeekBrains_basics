@@ -1,9 +1,18 @@
 -- SERIAL == BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
+USE shop;
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) COMMENT 'Название раздела'
+  name VARCHAR(255) COMMENT 'Название раздела',
+  UNIQUE unique_name(name(10))
 ) COMMENT = 'Разделы интернет-магазина';
+
+INSERT INTO catalogs VALUES
+  (DEFAULT, 'Процессоры'),
+  (DEFAULT, 'Мат.платы'),
+  (DEFAULT, 'Видеокарты');
+
+SELECT id, name FROM catalogs;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
