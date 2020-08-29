@@ -11,8 +11,7 @@ USE shop;
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) COMMENT 'Название раздела',
-  UNIQUE unique_name(name(10))
+  name VARCHAR(255) COMMENT 'Название раздела'
 ) COMMENT = 'Разделы интернет-магазина';
 
 -- Заполняем данными
@@ -21,32 +20,19 @@ INSERT INTO catalogs VALUES
   (DEFAULT, 'Мат.платы'),
   (DEFAULT, 'Видеокарты'),
   (DEFAULT, NULL),
+  (DEFAULT, ''),
   (DEFAULT, NULL);
 
 -- Проверим содержание таблицы
 SELECT * FROM catalogs;
 
 -- Запрос для обновления пустых значений на empty
-UPDATE catalogs SET name = 'empty' WHERE name IS NUll;
-/*
-В ответ получем:
-Error Code: 1062. Duplicate entry 'empty' for key 'catalogs.unique_name'
-Сработало ограниечение уникального ключа, оно не допускает нарушения целостности
-базы данных. Избежать такое поведение можно с помощью ключевого слова IGNORE.
-*/
+UPDATE catalogs SET name = 'empty' WHERE name IS NUll OR name = '';
+
 
 -- Проверим содержимое таблицы
 SELECT * FROM catalogs;
--- Содержание таблицы не изменилось
-
--- Добавим ключевое слово IGNORE в запрос
-UPDATE IGNORE catalogs SET name = 'empty' WHERE name IS NUll;
-
--- Проверим содержимое таблицы
-SELECT * FROM catalogs;
--- Содержание таблицы изменилось в 4 строке, значение NULL заменилось на empty, но 5 строка осталась NULL
-
--- Вывод: Данное задание выполнить не получится, иначе будет нарушена целостность данных.
+-- Содержание таблицы изменилось на empty во всех случаях
 
 /*
 2. Спроектируйте базу данных, которая позволяла бы организовать хранение медиафайлов, загружаемых пользователем (фото, аудио, видео). 
@@ -62,12 +48,11 @@ CREATE TABLE users (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) COMMENT = 'Пользователь';
-
 --  brithday_at DATE COMMENT 'Дата рождения', - данный столбец можно было опустить
 
 DROP TABLE IF EXISTS media;
 CREATE TABLE media (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "Идентификатор строки",
+  id SERIAL PRIMARY KEY COMMENT "Идентификатор строки",
   user_id INT UNSIGNED NOT NULL COMMENT "Ссылка на пользователя, который загрузил файл",
   filename VARCHAR(255) NOT NULL COMMENT "Путь к файлу",
   size INT NOT NULL COMMENT "Размер файла",
@@ -76,6 +61,9 @@ CREATE TABLE media (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "Время создания строки",
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Время обновления строки"
 ) COMMENT "Медиафайлы";
+/* Для столбца metadata можно было использовать дугой подход:
+Создать отдельную таблицу, но и данный подход имеет свои приемущества и недостатки.
+В данном подходе метаданные хранятся в JSON.*/
 
 DROP TABLE IF EXISTS media_types;
 CREATE TABLE media_types (
