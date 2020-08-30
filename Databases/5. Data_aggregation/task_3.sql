@@ -135,3 +135,34 @@ SELECT * FROM users;
 
 -- Выполянем запрос
 SELECT * FROM users WHERE DATE_FORMAT(birthday_at, '%M') IN ('August', 'May');
+
+
+/*
+(по желанию) Из таблицы catalogs извлекаются записи при помощи запроса. 
+SELECT * FROM catalogs WHERE id IN (5, 1, 2); Отсортируйте записи в порядке, заданном в списке IN.
+*/
+
+-- Создаём таблицу разделов
+DROP TABLE IF EXISTS catalogs;
+CREATE TABLE catalogs (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Название раздела',
+  UNIQUE unique_name(name(10))
+) COMMENT = 'Разделы интернет-магазина';
+
+-- Заполняем таблицу данными
+INSERT INTO catalogs VALUES
+  (NULL, 'Процессоры'),
+  (NULL, 'Материнские платы'),
+  (NULL, 'Видеокарты'),
+  (NULL, 'Жесткие диски'),
+  (NULL, 'Оперативная память');
+
+-- Проверяем данные
+SELECT * FROM catalogs;
+
+-- Выполняем запрос из задачи
+SELECT * FROM catalogs WHERE id IN (5, 1, 2);
+
+-- Добавляем поле FIELD и производим сортировку по данному полю
+SELECT * FROM catalogs WHERE id IN (5, 1, 2) ORDER BY FIELD(id, 5, 1, 2);
