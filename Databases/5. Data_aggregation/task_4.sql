@@ -53,3 +53,25 @@ GROUP BY
   weak
 ORDER BY
   count DESC;
+
+
+/* Подсчитайте произведение чисел в столбце таблицы. */
+-- Создаём таблицу для подсчёта пользователей
+DROP TABLE IF EXISTS numbers;
+CREATE TABLE numbers (
+  number INT
+);
+
+-- Заполняем таблицу данными
+INSERT INTO numbers (number) VALUES
+  (1),
+  (5),
+  (1),
+  (2),
+  (10);
+
+-- Проверяем данные
+SELECT * FROM numbers;
+
+-- Выполняем умножение через логарифмы
+SELECT ROUND(exp(SUM(log(number)))) AS composition FROM numbers;
