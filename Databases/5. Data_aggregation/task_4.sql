@@ -31,3 +31,25 @@ SELECT AVG((TO_DAYS(NOW()) - TO_DAYS(birthday_at)) / 365.25) AS mean_age FROM us
 Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели. 
 Следует учесть, что необходимы дни недели текущего года, а не года рождения.
 */
+
+-- Получаем месяцы и дни рождения
+SELECT *, MONTH(birthday_at), DAY(birthday_at) FROM users;
+
+-- Получаем текущий год
+SELECT YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at) FROM users;
+
+-- Получаем дату из данных значений
+SELECT DATE(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) AS date FROM users;
+
+-- Получаем день недели, когда день у пользователей дни рождения
+SELECT DATE_FORMAT(DATE(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))), '%W') AS weak FROM users;
+
+-- Группируем по дням недели и считаем количество дней рождения
+SELECT 
+  DATE_FORMAT(DATE(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))), '%W') AS weak, COUNT(*) AS count 
+FROM 
+  users
+GROUP BY
+  weak
+ORDER BY
+  count DESC;
