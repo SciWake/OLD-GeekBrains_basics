@@ -20,7 +20,6 @@ CREATE TABLE target_types (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-
 -- Создадим таблицу постов
 CREATE TABLE posts (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
