@@ -21,23 +21,17 @@ CREATE TABLE target_types (
 );
 
 
--- Заполнение данных
--- Добавление типов, что можно лайкать
-INSERT INTO target_types (name) VALUES 
-  ('messages'),
-  ('users'),
-  ('media'),
-  ('posts');
-
--- Заполняем лайки
-INSERT INTO likes 
-  SELECT 
-    id, 
-    FLOOR(1 + (RAND() * 300)), 
-    FLOOR(1 + (RAND() * 300)),
-    FLOOR(1 + (RAND() * 4)),
-    CURRENT_TIMESTAMP 
-  FROM messages;
-  
--- Проверка данных
-SELECT * FROM likes;
+-- Создадим таблицу постов
+CREATE TABLE posts (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  community_id INT UNSIGNED,
+  head VARCHAR(255),
+  body TEXT NOT NULL,
+  media_id INT UNSIGNED,
+  is_public BOOLEAN DEFAULT TRUE,
+  is_archived BOOLEAN DEFAULT FALSE,
+  views_counter INT UNSIGNED DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
