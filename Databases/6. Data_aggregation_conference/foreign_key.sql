@@ -97,3 +97,16 @@ ALTER TABLE media
     FOREIGN KEY (user_id) REFERENCES users(id),
   ADD CONSTRAINT media_media_type_id_fk
     FOREIGN KEY (media_type_id) REFERENCES media_types(id);
+
+
+-- Для таблицы лайков
+
+-- Смотрим структурв таблицы лайков
+DESC likes;
+
+-- Добавляем внешние ключи
+ALTER TABLE likes
+  ADD CONSTRAINT likes_user_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id),
+  ADD CONSTRAINT likes_target_type_id 
+    FOREIGN KEY (target_type_id) REFERENCES target_types(id);
