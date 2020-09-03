@@ -83,5 +83,40 @@ INSERT INTO `posts` SELECT * FROM `posts` `t2`
 SELECT COUNT(*) FROM posts WHERE updated_at < created_at;
 -- 0
 
+
+-- Выполняем проверку таблицы posts, где media_id ссылается на файлы, которых нет
+SELECT COUNT(*) FROM posts WHERE media_id NOT IN (SELECT id FROM media);
+-- 297 постов ссылаются на файлы, которых нет в таблице 
+
+-- Обновляем данные для таблицы posts, где media_id ссылается на файлы, которых нет
+UPDATE 
+  posts 
+SET 
+  media_id = (SELECT id FROM media ORDER BY RAND() LIMIT 1) 
+WHERE 
+  media_id NOT IN (SELECT id FROM media);
+
+-- Проверка данных
+SELECT COUNT(*) FROM posts WHERE media_id NOT IN (SELECT id FROM media);
+-- 0
+
+
+-- Выполняем проверку таблицы posts, где user_id ссылается на пользователей, которых нет
+SELECT COUNT(*) FROM posts WHERE user_id NOT IN (SELECT id FROM users);
+-- 2
+
+-- Обновляем данные для таблицы posts, где media_id ссылается на файлы, которых нет
+UPDATE 
+  posts 
+SET 
+  user_id = (SELECT id FROM users ORDER BY RAND() LIMIT 1) 
+WHERE 
+  user_id NOT IN (SELECT id FROM users);
+
+-- Проверка данных
+SELECT COUNT(*) FROM posts WHERE user_id NOT IN (SELECT id FROM users);
+-- 0
+
+
 -- Общий вывод данных для визуальной оценки
 SELECT * FROM posts LIMIT 20;
