@@ -125,3 +125,17 @@ ALTER TABLE friendship
     FOREIGN KEY (friend_id) REFERENCES users(id),
   ADD CONSTRAINT friendship_status_id_fk
     FOREIGN KEY (status_id) REFERENCES friendship_statuses(id);
+
+
+-- Для таблицы связи пользователй и групп
+
+-- Смотрим структурв таблицы связи пользователй и групп
+DESC communities_users;
+
+-- Добавляем внешние ключи
+ALTER TABLE communities_users
+  ADD CONSTRAINT communities_users_community_id_fk
+    FOREIGN KEY (community_id) REFERENCES communities(id)
+      ON DELETE CASCADE,
+  ADD CONSTRAINT communities_users_user_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id);
