@@ -28,13 +28,14 @@ profiles_user_id_fk описание стиля наименования огр�
       /*Задаём дополнительные параметры:
       После этого внешний ключ может уже быт создан, но обычно, задают дополнительные параметры:
       ON DELETE (что сделать, когда строка удаляется на которую ссылается внешний ключ).
-      Если указать CASCADE: при удалении строки, куда ссылается user_id, тогда СУБД автоматически удалит строку из таблицы profiles*/
+      Если указать CASCADE: при удалении строки, куда ссылается user_id, тогда СУБД автоматически удалит строку из таблицы profiles
+      RESTRICT - Тогда не бдует возможности удалить что-то, пока на данную таблицу ссылаются из других таблиц*/
       ON DELETE CASCADE,
       
   /*Задаём ключ для photo_id*/
   ADD CONSTRAINT profiles_photo_id_fk
     FOREIGN KEY (photo_id) REFERENCES media(id)
-      -- SET NULL
+      -- SET NULL если удаляется фотография пользователя, на которы ссылается photo_id и в ячейки ставится null
       ON DELETE SET NULL;
 
 
@@ -55,9 +56,33 @@ ALTER TABLE profiles MODIFY COLUMN photo_id INT(10) UNSIGNED;
 
 -- Для таблицы сообщений
 
--- Смотрим структурв таблицы
+-- Смотрим структуру таблицы
 DESC messages;
 
 -- Добавляем внешние ключи
 ALTER TABLE messages
-  ADD CONSTRAINT messages_from_user_id_fk
+  ADD CONSTRAINT messages_from_user_id_fk 
+    FOREIGN KEY (from_user_id) REFERENCES users(id),
+  ADD CONSTRAINT messages_to_user_id_fk 
+    FOREIGN KEY (to_user_id) REFERENCES users(id);
+
+-- Если нужно удалить
+ALTER TABLE table_name DROP FOREIGN KEY constraint_name;
+
+
+-- Для таблицы постов
+
+-- Смотрим структурв таблицы постов
+DESC posts;
+
+-- Добавляем внешние ключи
+ALTER TABLE posts
+  ADD CONSTRAINT posts_user_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id),
+  ADD CONSTRAINT posts_community_id_fk
+    FOREIGN KEY (community_id) REFERENCES communities(id),
+  ADD CONSTRAINT posts_media_id_fk
+    FOREIGN KEY (media_id) REFERENCES media(id)
+      ON DELETE SET NULL;
+
+
