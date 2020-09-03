@@ -57,3 +57,31 @@ CREATE TABLE posts (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- Заполняем таблицу через дамп и проверяем данные
+SELECT * FROM posts LIMIT 10;
+
+-- Устраняем неточности в данных
+
+-- Удаление значений, где пост принадлежит сообществу с id 0
+SELECT COUNT(*) FROM posts WHERE community_id = 0;
+-- 35
+
+-- Заполним их случайными значениями
+UPDATE posts SET community_id = (SELECT id FROM communities ORDER BY RAND() LIMIT 1) WHERE community_id = 0;
+
+-- Проверка данных
+SELECT COUNT(*) FROM posts WHERE community_id = 0;
+-- 0
+
+-- Заменяем стоблцы местами, где updated_at больше чем created_at
+INSERT INTO `posts` SELECT * FROM `posts` `t2` 
+  WHERE `updated_at` < `created_at` 
+    ON DUPLICATE KEY UPDATE `created_at` = `t2`.`updated_at`, `updated_at` = `t2`.`created_at`;
+
+-- Проверка данных
+SELECT COUNT(*) FROM posts WHERE updated_at < created_at;
+-- 0
+
+-- Общий вывод данных для визуальной оценки
+SELECT * FROM posts LIMIT 20;
