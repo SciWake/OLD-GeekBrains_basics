@@ -51,3 +51,13 @@ ALTER TABLE profiles
 -- Изменяем тип столбца при необходимости
 ALTER TABLE profiles DROP FOREIGN KEY profiles_user_id_fk;
 ALTER TABLE profiles MODIFY COLUMN photo_id INT(10) UNSIGNED;
+
+
+-- Для таблицы сообщений
+
+-- Смотрим структурв таблицы
+DESC messages;
+
+-- Добавляем внешние ключи
+ALTER TABLE messages
+  ADD CONSTRAINT messages_from_user_id_fk
