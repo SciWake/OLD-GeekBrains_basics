@@ -86,3 +86,14 @@ ALTER TABLE posts
       ON DELETE SET NULL;
 
 
+-- Для таблицы медиафайлов
+
+-- Смотрим структурв таблицы медиафайлов
+DESC media;
+
+-- Добавляем внешние ключи
+ALTER TABLE media
+  ADD CONSTRAINT media_user_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id),
+  ADD CONSTRAINT media_media_type_id_fk
+    FOREIGN KEY (media_type_id) REFERENCES media_types(id);
