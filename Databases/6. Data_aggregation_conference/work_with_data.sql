@@ -68,3 +68,9 @@ SELECT
     FROM media m
     ORDER BY size DESC
     LIMIT 10;
+
+
+ -- Выбираем друзей пользователя с двух сторон отношения дружбы
+(SELECT friend_id FROM friendship WHERE user_id = 7)
+UNION
+(SELECT user_id FROM friendship WHERE friend_id = 7);
