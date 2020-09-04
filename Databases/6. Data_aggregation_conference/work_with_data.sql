@@ -141,3 +141,9 @@ SELECT from_user_id,
     FROM messages
       WHERE (from_user_id = 7 OR to_user_id = 7)
     ORDER BY created_at DESC;
+
+
+-- Поиск пользователя по шаблонам имени  
+SELECT CONCAT(first_name, ' ', last_name) AS fullname  
+  FROM users
+  WHERE first_name LIKE 'M%';
