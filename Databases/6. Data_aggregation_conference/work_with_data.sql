@@ -74,3 +74,21 @@ SELECT
 (SELECT friend_id FROM friendship WHERE user_id = 7)
 UNION
 (SELECT user_id FROM friendship WHERE friend_id = 7);
+
+
+-- Выбираем только друзей с активным статусом
+SELECT * FROM friendship_statuses;
+
+(SELECT friend_id 
+  FROM friendship 
+  WHERE user_id = 8 AND status_id = (
+      SELECT id FROM friendship_statuses WHERE name = 'Confirmed'
+    )
+)
+UNION
+(SELECT user_id 
+  FROM friendship 
+  WHERE friend_id = 8 AND status_id = (
+      SELECT id FROM friendship_statuses WHERE name = 'Confirmed'
+    )
+);
