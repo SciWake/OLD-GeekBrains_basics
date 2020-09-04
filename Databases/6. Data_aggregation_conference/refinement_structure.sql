@@ -29,18 +29,22 @@ INSERT INTO target_types (name) VALUES
   ('media'),
   ('posts');
 
+-- Выбор id для медиофайлов медиафайлы
+SELECT id FROM media;
+
 -- Заполняем лайки
 INSERT INTO likes 
   SELECT 
     id, 
     FLOOR(1 + (RAND() * 300)), 
-    FLOOR(1 + (RAND() * 300)),
+    FLOOR((SELECT id FROM media ORDER BY RAND() LIMIT 1)),
     FLOOR(1 + (RAND() * 4)),
     CURRENT_TIMESTAMP 
   FROM messages;
   
 -- Проверка данных
 SELECT * FROM likes;
+
 
 
 -- Создадим таблицу постов
