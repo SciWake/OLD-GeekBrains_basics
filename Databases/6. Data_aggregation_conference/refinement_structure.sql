@@ -48,10 +48,10 @@ INSERT INTO likes
 -- Выбираем лайки, где тип даныых media
 SELECT * FROM likes WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'media');
 
--- Выбираем медиафайлы с типо фотография
+-- Выбираем медиафайлы с типом фотография
 SELECT id FROM media WHERE media_type_id IN (SELECT id FROM media_types WHERE name = 'photo');
 
--- Обновляем target_id с типо лайка на медиафайл, который является фотографией
+-- Обновляем target_id с типом лайка на медиафайл, установив значение id на медиофалй type = 'photo'
 UPDATE likes 
   SET target_id = (SELECT id FROM media WHERE media_type_id IN (SELECT id FROM media_types WHERE name = 'photo') ORDER BY RAND() LIMIT 1)
   WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'media');
