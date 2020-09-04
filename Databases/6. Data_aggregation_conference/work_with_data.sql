@@ -30,3 +30,11 @@ SELECT
   ) AS file_path
   FROM users
     WHERE id = 7;
+
+
+-- Получаем фотографии пользователя
+SELECT filepath FROM media
+  WHERE user_id = 7
+    AND media_type_id = (
+      SELECT id FROM media_types WHERE name = 'photo'
+    );
