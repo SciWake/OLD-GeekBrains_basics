@@ -154,6 +154,7 @@ SELECT CONCAT(first_name, ' ', last_name) AS fullname
   WHERE last_name RLIKE '^K.*r$';
   
 
+
 -- Определить кто больше поставил лайков (всего) - мужчины или женщины?
 
 -- Отсортируем пользователей по количеству лайков
@@ -195,10 +196,38 @@ SELECT user_id
 
 -- Выводим пол пользователя, который поставил наибольшее количество лайков в системе
 SELECT gender FROM profiles WHERE user_id = 
-(SELECT user_id
+  (SELECT user_id
   FROM likes 
   GROUP BY user_id 
   ORDER BY COUNT(*) DESC
   LIMIT 1);
 -- m
 
+
+
+-- 4. Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей).
+
+-- Смотрим таблицу лайков
+SELECT * FROM likes;
+
+-- Смотрим таблицу типов потсов
+SELECT * FROM target_types;
+
+-- Выведем 10 самых молодых пользователй в системе
+SELECT user_id 
+  FROM profiles
+  ORDER BY birthday DESC
+  LIMIT 10;
+
+-- Выбираем лайки по необходимому типу
+SELECT * 
+  FROM likes 
+    WHERE 
+      target_type_id = (SELECT id FROM target_types WHERE name = 'users');
+
+-- Считем сколько лайков поставили пользователям
+SELECT target_id, COUNT(*) 
+  FROM likes 
+    WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users')
+      AND target_id IN (SELECT * FROM (SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10) AS top_profiles)
+      GROUP BY target_id;
