@@ -182,3 +182,23 @@ SELECT user_id, COUNT(*) AS count_likes
   ORDER BY count_likes DESC
   LIMIT 1;
 -- user_id = 78 | count_likes = 15
+
+
+-- Выведем пол пользователя, который получил наибольшее количество лайков
+
+-- Выводим пользователя с наибольшим количеством лайков
+SELECT user_id
+  FROM likes 
+  GROUP BY user_id 
+  ORDER BY COUNT(*) DESC
+  LIMIT 1;
+
+-- Выводим пол пользователя, который поставил наибольшее количество лайков в системе
+SELECT gender FROM profiles WHERE user_id = 
+(SELECT user_id
+  FROM likes 
+  GROUP BY user_id 
+  ORDER BY COUNT(*) DESC
+  LIMIT 1);
+-- m
+
