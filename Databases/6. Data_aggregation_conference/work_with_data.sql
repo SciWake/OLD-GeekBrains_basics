@@ -152,3 +152,33 @@ SELECT CONCAT(first_name, ' ', last_name) AS fullname
 SELECT CONCAT(first_name, ' ', last_name) AS fullname  
   FROM users
   WHERE last_name RLIKE '^K.*r$';
+  
+
+-- Определить кто больше поставил лайков (всего) - мужчины или женщины?
+
+-- Отсортируем пользователей по количеству лайков
+SELECT user_id, COUNT(*) as count_likes 
+  FROM likes 
+  GROUP BY user_id 
+  ORDER BY count_likes DESC;
+
+-- Выбираем пользователей, которые являются девушками
+SELECT user_id FROM profiles WHERE gender = 'f';
+
+-- Выбираем девушку которая поставила больше всего лайков
+SELECT user_id, COUNT(*) as count_likes
+  FROM likes 
+  GROUP BY user_id 
+    HAVING user_id IN (SELECT user_id FROM profiles WHERE gender = 'f')
+  ORDER BY count_likes DESC
+  LIMIT 1;
+-- user_id = 90 | count_likes = 14
+
+-- Выбираем мужчину который поставил больше всего лайков
+SELECT user_id, COUNT(*) AS count_likes
+  FROM likes 
+  GROUP BY user_id 
+    HAVING user_id IN (SELECT user_id FROM profiles WHERE gender = 'm')
+  ORDER BY count_likes DESC
+  LIMIT 1;
+-- user_id = 78 | count_likes = 15
