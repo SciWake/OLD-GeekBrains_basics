@@ -124,10 +124,20 @@ SELECT user_id, SUM(size) AS total
   FROM media
   GROUP BY user_id WITH ROLLUP
   HAVING total > 1000000;
-  
-  
+
+
 -- Выбираем сообщения от пользователя и к пользователю
 SELECT from_user_id, to_user_id, body, is_delivered, created_at 
   FROM messages
     WHERE from_user_id = 7 OR to_user_id = 7
+    ORDER BY created_at DESC;
+
+
+-- Сообщения со статусом
+SELECT from_user_id, 
+  to_user_id, 
+  body, 
+  IF(is_delivered, 'delivered', 'not delivered') AS status 
+    FROM messages
+      WHERE (from_user_id = 7 OR to_user_id = 7)
     ORDER BY created_at DESC;
