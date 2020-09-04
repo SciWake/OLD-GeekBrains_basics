@@ -51,3 +51,20 @@ SELECT CONCAT(
     WHERE user_id = 8 AND media_type_id = (
         SELECT id FROM media_types WHERE name LIKE 'photo'
 );
+
+
+-- Найдём кому принадлежат 10 самых больших медиафайлов
+SELECT user_id, filepath, size 
+  FROM media 
+  ORDER BY size DESC
+  LIMIT 10;
+  
+  -- Улучшим запрос и используем алиасы для имён таблиц
+SELECT 
+  (SELECT CONCAT(first_name, ' ', last_name) 
+    FROM users u WHERE u.id = m.user_id) AS owner,
+  filepath, 
+  size 
+    FROM media m
+    ORDER BY size DESC
+    LIMIT 10;
