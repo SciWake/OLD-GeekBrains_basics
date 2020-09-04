@@ -110,3 +110,17 @@ SELECT filepath FROM media WHERE user_id IN (
     )
   )
 );
+
+
+-- Определяем пользователей, общее занимаемое место медиафайлов которых 
+-- превышает 100МБ
+SELECT user_id, SUM(size) AS total
+  FROM media
+  GROUP BY user_id
+  HAVING total > 1000000;
+  
+-- Добавим сумму всех значений пользователей
+SELECT user_id, SUM(size) AS total
+  FROM media
+  GROUP BY user_id WITH ROLLUP
+  HAVING total > 1000000;  
