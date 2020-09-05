@@ -89,6 +89,20 @@ UPDATE likes
   SET target_id = (SELECT id FROM users ORDER BY RAND() LIMIT 1)
   WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'users');
 
+
+-- Для лайко на сообщения
+
+-- Выбираем лайки, где лайк стоит на сообщение
+SELECT * FROM likes WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'messages');
+
+-- Выбираем id сообщений из таблицы messages
+SELECT id FROM messages;
+
+-- Генерируем id лайка в столбце target_id из таблицы messages, где цель (target_type_id) равняется сообщению
+UPDATE likes 
+  SET target_id = (SELECT id FROM messages ORDER BY RAND() LIMIT 1)
+  WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'messages');
+
 -- Проверка данных
 SELECT * FROM likes;
 
