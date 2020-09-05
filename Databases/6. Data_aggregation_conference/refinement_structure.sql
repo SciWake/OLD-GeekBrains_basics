@@ -76,6 +76,23 @@ UPDATE likes
   WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'posts');
 
 
+-- Для лайков на пользователям
+
+-- Выбираем лайки, где лайк стоит на пользователя
+SELECT * FROM likes WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'users');
+
+-- Выбираем id пользователей из таблицы users
+SELECT id FROM users;
+
+-- Генерируем id лайка в столбце target_id из таблицы users, где цель (target_type_id) равняется пользователю
+UPDATE likes 
+  SET target_id = (SELECT id FROM users ORDER BY RAND() LIMIT 1)
+  WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'users');
+
+-- Проверка данных
+SELECT * FROM likes;
+
+
 -- Создадим таблицу постов
 CREATE TABLE posts (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
