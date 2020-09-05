@@ -42,22 +42,38 @@ INSERT INTO likes
     CURRENT_TIMESTAMP 
   FROM messages;
 
+-- Проверка данных
+SELECT * FROM likes;
 
--- Исправим лайки в типе media, которые стоят на аудиозаписи... а должы быть на фотографии пользователей
 
--- Выбираем лайки, где тип даныых media
+-- Исправим неправильную генерацию данных, в таблице лайокв
+
+-- Для лайков на медиафайлы:
+
+-- Выбираем лайки, где лайк установлен на медифайл
 SELECT * FROM likes WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'media');
 
--- Выбираем медиафайлы с типом фотография
+-- Выбираем id медиафайлов, которые являются фотографиями из таблицы media 
 SELECT id FROM media WHERE media_type_id IN (SELECT id FROM media_types WHERE name = 'photo');
 
--- Обновляем target_id с типом лайка на медиафайл, установив значение id на медиофалй type = 'photo'
+-- Генерируем id лайка в столбце target_id из таблицы media с типом даннных фотография
 UPDATE likes 
   SET target_id = (SELECT id FROM media WHERE media_type_id IN (SELECT id FROM media_types WHERE name = 'photo') ORDER BY RAND() LIMIT 1)
   WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'media');
+  
+  
+-- Для лайков на посты 
 
--- Проверка данных
-SELECT * FROM likes;
+-- Выбираем лайки, где лайк стоит на пост
+SELECT * FROM likes WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'posts');
+
+-- Выбираем id постов из таблицы posts
+SELECT id FROM posts;
+
+-- Генерируем id лайка в столбце target_id из таблицы posts, где цель (target_type_id) равняется посту
+UPDATE likes 
+  SET target_id = (SELECT id FROM posts ORDER BY RAND() LIMIT 1)
+  WHERE target_type_id IN (SELECT id FROM target_types WHERE name = 'posts');
 
 
 -- Создадим таблицу постов
