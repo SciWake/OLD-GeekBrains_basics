@@ -188,19 +188,11 @@ SELECT user_id, COUNT(*) AS count_likes
 -- Выведем пол пользователя, который получил наибольшее количество лайков
 
 -- Выводим пользователя с наибольшим количеством лайков
-SELECT user_id
-  FROM likes 
-  GROUP BY user_id 
-  ORDER BY COUNT(*) DESC
-  LIMIT 1;
+SELECT user_id FROM likes GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 1;
 
 -- Выводим пол пользователя, который поставил наибольшее количество лайков в системе
 SELECT gender FROM profiles WHERE user_id = 
-  (SELECT user_id
-  FROM likes 
-  GROUP BY user_id 
-  ORDER BY COUNT(*) DESC
-  LIMIT 1);
+  (SELECT user_id FROM likes GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 1);
 -- m
 
 
@@ -214,16 +206,10 @@ SELECT * FROM likes;
 SELECT * FROM target_types;
 
 -- Выведем 10 самых молодых пользователй в системе
-SELECT user_id 
-  FROM profiles
-  ORDER BY birthday DESC
-  LIMIT 10;
+SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10;
 
--- Выбираем лайки по необходимому типу
-SELECT * 
-  FROM likes 
-    WHERE 
-      target_type_id = (SELECT id FROM target_types WHERE name = 'users');
+-- Выбираем лайки поставленные пользователям
+SELECT * FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users');
 
 -- Считем сколько лайков поставили пользователям
 SELECT target_id, COUNT(*) 
@@ -231,3 +217,63 @@ SELECT target_id, COUNT(*)
     WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users')
       AND target_id IN (SELECT * FROM (SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10) AS top_profiles)
       GROUP BY target_id;
+
+
+-- Выполним аналогичное с всеми типами лайков
+-- Выбираем лайки поставленные сообщениям
+SELECT * FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'messages');
+
+-- Выбираем пользователй, которым поставили лайки на сообщения. При этом получаем их дату рождения
+SELECT to_user_id,
+  (SELECT birthday FROM profiles WHERE to_user_id = user_id) as birthday
+  FROM messages
+    WHERE id IN  (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'messages'));
+
+-- Выбираем пользователй, которым были поставлены лайки на медиафайлы (фотографии). При этом получаем их дату рождения
+SELECT user_id, 
+  (SELECT birthday FROM profiles WHERE media.user_id = profiles.user_id) as birthday
+    FROM media
+      WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'media'));
+
+-- Выбираем пользователй, которым были поставлены лайки на посты. При этом получаем их дату рождения
+SELECT user_id, 
+  (SELECT birthday FROM profiles WHERE posts.user_id = profiles.user_id) as birthday
+    FROM posts
+      WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'posts'));
+
+-- Выбираем пользователй, которым были поставлены лайки
+SELECT target_id,
+  (SELECT birthday FROM profiles WHERE target_id = user_id) as birthday
+    FROM likes 
+      WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users');
+
+
+-- Осталось выполнить вертикальное объединение всех запросов и задать условия фильтрации
+SELECT user_id, COUNT(*)
+  FROM (
+	SELECT to_user_id AS user_id,
+	  (SELECT birthday FROM profiles WHERE to_user_id = user_id) as birthday
+	    FROM messages
+		  WHERE id IN  (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'messages'))
+	UNION ALL
+	SELECT user_id, 
+	  (SELECT birthday FROM profiles WHERE media.user_id = profiles.user_id) as birthday
+	    FROM media
+		  WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'media'))
+	UNION ALL
+	SELECT user_id, 
+	  (SELECT birthday FROM profiles WHERE posts.user_id = profiles.user_id) as birthday
+	    FROM posts
+		  WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'posts'))
+	UNION ALL
+	SELECT target_id,
+	  (SELECT birthday FROM profiles WHERE target_id = user_id) as birthday
+	    FROM likes 
+		  WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users')
+    ) AS likes_users
+  GROUP BY user_id 
+  ORDER BY birthday DESC 
+  LIMIT 10;
+
+SELECT * FROM posts;
+
