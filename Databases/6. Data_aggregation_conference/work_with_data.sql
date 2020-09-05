@@ -197,7 +197,7 @@ SELECT gender FROM profiles WHERE user_id =
 
 
 
--- 4. Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей).
+-- Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей).
 
 -- Смотрим таблицу лайков
 SELECT * FROM likes;
@@ -274,6 +274,32 @@ SELECT user_id, COUNT(*)
   GROUP BY user_id 
   ORDER BY birthday DESC 
   LIMIT 10;
+-- К данному запросу можно добавить сумму, но полуится дополнительная вложенность, что сделат запрос большим.
+-- Поэтому, можно сказать, что данный запрос показывает сколько лайков получил каждый самый молодой пользователь из 10 молодых.
 
-SELECT * FROM posts;
+
+-- Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети
+
+-- Выполняем запрос выше, но делаем сортировку по количествую лайков. Убираем столбец датый рождения, в данном запросе он не нужен
+SELECT user_id, COUNT(*) AS count_likes 
+  FROM (
+	SELECT to_user_id AS user_id
+	  FROM messages
+		WHERE id IN  (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'messages'))
+	UNION ALL
+	SELECT user_id
+	  FROM media
+		WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'media'))
+	UNION ALL
+	SELECT user_id
+	  FROM posts
+		WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'posts'))
+	UNION ALL
+	SELECT target_id
+	  FROM likes 
+		WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users')
+    ) AS likes_users
+  GROUP BY user_id 
+  ORDER BY count_likes 
+  LIMIT 10;
 
