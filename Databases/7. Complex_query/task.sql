@@ -110,3 +110,17 @@ JOIN
 JOIN
   users
   ON users.id = user_id;
+  
+
+/* Выведите список товаров products и разделов catalogs, который соответствует товару. */
+
+SELECT 
+  products.id, 
+  products.name, 
+  products.price, 
+  catalogs.name AS catalog_name  
+FROM 
+  products
+LEFT JOIN 
+  catalogs
+ON products.catalog_id = catalogs.id;
