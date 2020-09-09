@@ -124,3 +124,54 @@ FROM
 LEFT JOIN 
   catalogs
 ON products.catalog_id = catalogs.id;
+
+/* Есть таблица рейсов flights (id, from, to) и таблица городов cities (label, name). Поля from, to и label содержат английские названия городов, поле name — русское. 
+Выведите список рейсов (flights) с русскими названиями городов. */
+
+-- Создаём необходимую структуру для выполнения задания
+
+-- Созадим таблицу flights
+DROP TABLE IF EXISTS flights;
+CREATE TABLE flights (
+  `id` SERIAL PRIMARY KEY,
+  `from` VARCHAR(255),
+  `to` VARCHAR(255)
+);
+
+-- Заполняем таблицу данными
+INSERT INTO flights (`from`, `to`) VALUES
+  ('moscow', 'omsk'),
+  ('omsk', 'irkutsk'),
+  ('moscow', 'kazan'),
+  ('moscow', 'agadur');
+  
+
+-- Созадим таблицу cities
+DROP TABLE IF EXISTS cities;
+CREATE TABLE cities (
+  `id` SERIAL PRIMARY KEY,
+  `label` VARCHAR(255),
+  `name` VARCHAR(255)
+);
+
+-- Заполняем таблицу данными
+INSERT INTO cities (`label`, `name`) VALUES
+  ('moscow', 'Москва'),
+  ('omsk', 'Омск'),
+  ('kazan', 'Казань'),
+  ('irkutsk', 'Иркутск');
+
+
+-- Заменяем названия городов на русские с использованием JOIN запросов
+SELECT 
+  flights.id,
+  cities_from.name AS `from`,
+  cities_to.name AS `to`
+FROM 
+  flights
+LEFT JOIN 
+  cities AS cities_from
+ON flights.from = cities_from.label
+LEFT JOIN 
+  cities AS cities_to
+ON flights.to = cities_to.label;
