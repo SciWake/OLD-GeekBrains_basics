@@ -92,9 +92,21 @@ INSERT INTO orders_products (order_id, product_id, total) VALUES
 
 /* Составьте список пользователей users, которые осуществили хотя бы один заказ (orders) в интернет-магазине. */
 
+-- C Использование вложенных запросов
 -- Выводим id пользователей, которые сделали более 1 заказа
 SELECT user_id FROM orders WHERE id IN (SELECT order_id FROM orders_products WHERE total > 0);
 
 -- Улучшаем запрос, добавив имя пользователя
 SELECT id, name FROM users WHERE 
   id IN (SELECT user_id FROM orders WHERE id IN (SELECT order_id FROM orders_products WHERE total > 0));
+  
+
+-- Аналогичный запрос с использование JOIN
+SELECT DISTINCT user_id, name FROM
+  orders 
+JOIN 
+  orders_products
+  ON orders.id = orders_products.order_id AND total > 0 
+JOIN
+  users
+  ON users.id = user_id;
