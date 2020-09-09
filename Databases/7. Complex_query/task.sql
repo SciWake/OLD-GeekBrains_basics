@@ -88,3 +88,13 @@ INSERT INTO orders_products (order_id, product_id, total) VALUES
   (1, 2, 4),
   (1, 1, 1),
   (3, 3, 1);
+  
+
+/* Составьте список пользователей users, которые осуществили хотя бы один заказ (orders) в интернет-магазине. */
+
+-- Выводим id пользователей, которые сделали более 1 заказа
+SELECT user_id FROM orders WHERE id IN (SELECT order_id FROM orders_products WHERE total > 0);
+
+-- Улучшаем запрос, добавив имя пользователя
+SELECT id, name FROM users WHERE 
+  id IN (SELECT user_id FROM orders WHERE id IN (SELECT order_id FROM orders_products WHERE total > 0));
