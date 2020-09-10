@@ -278,3 +278,19 @@ SELECT SUM(count_likes)
 	GROUP BY user_id
   ) AS count_users_likes;
 -- 44
+
+
+/* Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети */
+-- Для оценки активности используется количество данных пользователя (Количество постов, лайков, медиафайлов)
+
+SELECT users.id AS user_id, COUNT(users.id) as count_data
+  FROM users
+    INNER JOIN media
+      ON users.id = media.user_id
+	INNER JOIN posts
+      ON users.id = posts.user_id
+	INNER JOIN likes
+      ON users.id = likes.user_id
+GROUP BY users.id
+ORDER BY count_data
+LIMIT 10;
