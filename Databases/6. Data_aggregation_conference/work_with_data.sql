@@ -241,12 +241,6 @@ SELECT user_id,
     FROM posts
       WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'posts'));
 
--- Выбираем пользователй, которым были поставлены лайки
-SELECT target_id,
-  (SELECT birthday FROM profiles WHERE target_id = user_id) as birthday
-    FROM likes 
-      WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users');
-
 
 -- Осталось выполнить вертикальное объединение всех запросов и задать условия фильтрации
 SELECT user_id, COUNT(*)
@@ -265,11 +259,6 @@ SELECT user_id, COUNT(*)
 	  (SELECT birthday FROM profiles WHERE posts.user_id = profiles.user_id) as birthday
 	    FROM posts
 		  WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'posts'))
-	UNION ALL
-	SELECT target_id,
-	  (SELECT birthday FROM profiles WHERE target_id = user_id) as birthday
-	    FROM likes 
-		  WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users')
     ) AS likes_users
   GROUP BY user_id 
   ORDER BY birthday DESC 
@@ -294,10 +283,6 @@ SELECT user_id, COUNT(*) AS count_likes
 	SELECT user_id
 	  FROM posts
 		WHERE id IN (SELECT target_id FROM likes WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'posts'))
-	UNION ALL
-	SELECT target_id
-	  FROM likes 
-		WHERE target_type_id = (SELECT id FROM target_types WHERE name = 'users')
     ) AS likes_users
   GROUP BY user_id 
   ORDER BY count_likes 
