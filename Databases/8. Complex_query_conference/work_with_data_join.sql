@@ -178,3 +178,103 @@ SELECT likes.user_id, COUNT(likes.user_id) AS count_likes, profiles.gender
 -- Пример вывода данных:
 -- |  user_id  |  count_likes  |  gender  |
 --    255         16              f
+
+
+/* Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей). */
+
+-- Выбираем пользователей, которым поставили лайк на медиафайл.
+SELECT media.user_id
+  FROM likes
+	INNER JOIN target_types
+	  ON likes.target_type_id = target_types.id
+	INNER JOIN media
+	  ON likes.target_id = media.id
+  WHERE target_types.name = 'media';
+
+-- Выбираем пользователей, которым поставили лайк на сообщение.
+SELECT messages.from_user_id
+  FROM likes
+    INNER JOIN target_types
+      ON likes.target_type_id = target_types.id
+	INNER JOIN messages
+      ON likes.target_id = messages.id
+  WHERE target_types.name = 'messages';
+
+-- Выбираем пользователей, которым поставили лайк на пост. Дополнительно выводим столбец даты рождения
+SELECT posts.user_id
+  FROM likes
+    INNER JOIN target_types
+      ON likes.target_type_id = target_types.id
+	INNER JOIN posts
+      ON likes.target_id = posts.id
+  WHERE target_types.name = 'posts';
+
+-- Выводим 10 самых молодых пользователей
+SELECT * 
+  FROM profiles
+ORDER BY birthday DESC
+LIMIT 10;
+
+-- Вывод 10 молодых пользователей и количество лайков поставленных им
+SELECT user_id, COUNT(user_id) AS count_likes
+  FROM (
+	SELECT media.user_id
+	  FROM likes
+		INNER JOIN target_types
+		  ON likes.target_type_id = target_types.id
+		INNER JOIN media
+		  ON likes.target_id = media.id
+	  WHERE target_types.name = 'media'
+	UNION ALL
+	SELECT messages.from_user_id
+	  FROM likes
+		INNER JOIN target_types
+		  ON likes.target_type_id = target_types.id
+		INNER JOIN messages
+		  ON likes.target_id = messages.id
+	  WHERE target_types.name = 'messages'
+	UNION ALL
+	SELECT posts.user_id
+	  FROM likes
+		INNER JOIN target_types
+		  ON likes.target_type_id = target_types.id
+		INNER JOIN posts
+		  ON likes.target_id = posts.id
+	  WHERE target_types.name = 'posts'
+  ) AS users_likes
+WHERE user_id IN (SELECT * FROM (SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10) AS top_users)
+GROUP BY user_id;
+
+-- Обвернём в ещё один запрос и выведем общее количество лайков для молодых пользователей
+SELECT SUM(count_likes) 
+  FROM (
+	SELECT user_id, COUNT(user_id) AS count_likes
+	  FROM (
+		SELECT media.user_id
+		  FROM likes
+			INNER JOIN target_types
+			  ON likes.target_type_id = target_types.id
+			INNER JOIN media
+			  ON likes.target_id = media.id
+		  WHERE target_types.name = 'media'
+		UNION ALL
+		SELECT messages.from_user_id
+		  FROM likes
+			INNER JOIN target_types
+			  ON likes.target_type_id = target_types.id
+			INNER JOIN messages
+			  ON likes.target_id = messages.id
+		  WHERE target_types.name = 'messages'
+		UNION ALL
+		SELECT posts.user_id
+		  FROM likes
+			INNER JOIN target_types
+			  ON likes.target_type_id = target_types.id
+			INNER JOIN posts
+			  ON likes.target_id = posts.id
+		  WHERE target_types.name = 'posts'
+	  ) AS users_likes
+	WHERE user_id IN (SELECT * FROM (SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10) AS top_users)
+	GROUP BY user_id
+  ) AS count_users_likes;
+-- 44
