@@ -167,17 +167,17 @@ SELECT users.id, first_name, last_name, COUNT(target_types.id) AS total_likes
 
 /* Определить кто больше поставил лайков (всего) - мужчины или женщины? */
 
-SELECT likes.user_id, COUNT(likes.user_id) AS count_likes, profiles.gender
+SELECT COUNT(likes.user_id) AS count_likes, profiles.gender
   FROM likes
     INNER JOIN profiles
       ON likes.user_id = profiles.user_id
-  GROUP BY user_id
+  GROUP BY gender
   ORDER BY count_likes DESC
   LIMIT 1;
   
 -- Пример вывода данных:
--- |  user_id  |  count_likes  |  gender  |
---    255         16              f
+-- |  count_likes  |  gender  |
+--       1132           f
 
 
 /* Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей). */
