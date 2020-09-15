@@ -107,3 +107,46 @@ CREATE VIEW product_name (name, type)
 
 -- Обращаемся к представлению
 SELECT * FROM product_name;
+
+
+
+/* Пусть имеется любая таблица с календарным полем created_at. 
+Создайте запрос, который удаляет устаревшие записи из таблицы, оставляя только 5 самых свежих записей. */
+
+USE shop;
+
+-- Модифицируем таблицу пользователй, под условие задачи
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Имя покупателя',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT = 'Покупатели';
+
+-- Заполняем таблицу необходимыми данными
+INSERT INTO users (name, created_at) VALUES
+  ('Геннадий', '2013-08-01'),
+  ('Наталья', '2014-08-04'),
+  ('Александр', '2018-01-13'),
+  ('Александр', '2018-08-16'),
+  ('Александр', '2011-08-16'),
+  ('Александр', '2018-08-17'),
+  ('Александр', '2002-08-17');
+
+-- Проверяем данные
+SELECT * FROM users;
+
+-- Вопспользуемся транзакцией
+START TRANSACTION;
+
+PREPARE del_users FROM 'DELETE FROM users ORDER BY created_at LIMIT ?';
+
+SET @count_users = (SELECT COUNT(*) - 5 FROM users);
+
+EXECUTE del_users USING @count_users;
+
+COMMIT;
+
+
+-- Проверяем работу транзакции
+SELECT * FROM users;
