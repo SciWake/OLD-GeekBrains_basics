@@ -98,6 +98,7 @@ SELECT products.name, catalogs.name
       ON products.catalog_id = catalogs.id;
 
 -- Преобразуем запрос в представление
+DROP VIEW IF EXISTS product_name;
 CREATE VIEW product_name (name, type)
   AS SELECT products.name, catalogs.name 
 	  FROM products
