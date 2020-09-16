@@ -251,16 +251,25 @@ SELECT SUM(got_likes) AS total_likes_for_youngest
 
 
 /* Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети */
--- Для оценки активности используется количество данных пользователя (Количество постов, лайков, медиафайлов)
+-- Для оценки активности используется количество данных пользователя (Количество сообщений, лайков, медиафайлов)
 
-SELECT users.id AS user_id, COUNT(users.id) as count_data
+SELECT users.id,
+  COUNT(DISTINCT messages.id) + 
+  COUNT(DISTINCT likes.id) + 
+  COUNT(DISTINCT media.id) AS activity 
   FROM users
-    INNER JOIN media
-      ON users.id = media.user_id
-	INNER JOIN posts
-      ON users.id = posts.user_id
-	INNER JOIN likes
+    LEFT JOIN messages 
+      ON users.id = messages.from_user_id
+    LEFT JOIN likes
       ON users.id = likes.user_id
-GROUP BY users.id
-ORDER BY count_data
-LIMIT 10;
+    LEFT JOIN media
+      ON users.id = media.user_id
+  GROUP BY users.id
+  ORDER BY activity
+  LIMIT 10;
+
+-- Пример вывода данных:
+-- |  id  |  activity  |
+--    97     10
+--    231    11
+--       . . .
