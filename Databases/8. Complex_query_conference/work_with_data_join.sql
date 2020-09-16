@@ -182,102 +182,72 @@ SELECT COUNT(likes.user_id) AS count_likes, profiles.gender
 
 /* Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей). */
 
--- Выбираем пользователей, которым поставили лайк на медиафайл.
-SELECT media.user_id
-  FROM likes
-	INNER JOIN target_types
-	  ON likes.target_type_id = target_types.id
-	INNER JOIN media
-	  ON likes.target_id = media.id
-  WHERE target_types.name = 'media';
+-- Подсчитываем общее количество лайков, которые получили 10 самых молодых пользователей.
+SELECT SUM(got_likes) AS total_likes_for_youngest
+  FROM (   
+    SELECT COUNT(DISTINCT likes.id) AS got_likes 
+      FROM profiles
+        LEFT JOIN likes
+          ON likes.target_id = profiles.user_id
+            AND target_type_id = 2
+      GROUP BY profiles.user_id
+      ORDER BY profiles.birthday DESC
+      LIMIT 10
+) AS youngest;
 
--- Выбираем пользователей, которым поставили лайк на сообщение.
-SELECT messages.from_user_id
-  FROM likes
-    INNER JOIN target_types
-      ON likes.target_type_id = target_types.id
-	INNER JOIN messages
-      ON likes.target_id = messages.id
-  WHERE target_types.name = 'messages';
+/* Доработаем запрос. 
+Используюя LEFT JOIN, так как INNER JOIN не выбирает пользователей без лайков (0). 
+Данный запрос меняет логику работы и выборку из данных */
+SELECT SUM(got_likes) AS total_likes_for_youngest
+  FROM (   
+    SELECT COUNT(DISTINCT likes.id) AS got_likes 
+      FROM profiles
+        LEFT JOIN likes
+          ON likes.target_id = profiles.user_id
+            AND target_type_id = 2
+      GROUP BY profiles.user_id
+      ORDER BY profiles.birthday DESC
+      LIMIT 10
+) AS youngest;
 
--- Выбираем пользователей, которым поставили лайк на пост. Дополнительно выводим столбец даты рождения
-SELECT posts.user_id
-  FROM likes
-    INNER JOIN target_types
-      ON likes.target_type_id = target_types.id
-	INNER JOIN posts
-      ON likes.target_id = posts.id
-  WHERE target_types.name = 'posts';
 
--- Выводим 10 самых молодых пользователей
-SELECT * 
-  FROM profiles
-ORDER BY birthday DESC
-LIMIT 10;
+/* Доработаем запрос.
+ Удаляем явное указание id, который обозначает тип объекта (фото, пост...), поэтому была введена таблица c объединение (LEFT / RIGHT JOIN target_types),
+ которая позволяет указать тип объекта в формате 'users' */
 
--- Вывод 10 молодых пользователей и количество лайков поставленных им
-SELECT user_id, COUNT(user_id) AS count_likes
-  FROM (
-	SELECT media.user_id
-	  FROM likes
-		INNER JOIN target_types
-		  ON likes.target_type_id = target_types.id
-		INNER JOIN media
-		  ON likes.target_id = media.id
-	  WHERE target_types.name = 'media'
-	UNION ALL
-	SELECT messages.from_user_id
-	  FROM likes
-		INNER JOIN target_types
-		  ON likes.target_type_id = target_types.id
-		INNER JOIN messages
-		  ON likes.target_id = messages.id
-	  WHERE target_types.name = 'messages'
-	UNION ALL
-	SELECT posts.user_id
-	  FROM likes
-		INNER JOIN target_types
-		  ON likes.target_type_id = target_types.id
-		INNER JOIN posts
-		  ON likes.target_id = posts.id
-	  WHERE target_types.name = 'posts'
-  ) AS users_likes
-WHERE user_id IN (SELECT * FROM (SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10) AS top_users)
-GROUP BY user_id;
+-- Вариант с левой таблицей профилей
+SELECT SUM(got_likes) AS total_likes_for_youngest
+  FROM (   
+    SELECT COUNT(target_types.id) AS got_likes 
+      FROM profiles
+        LEFT JOIN likes
+          ON likes.target_id = profiles.user_id
+        LEFT JOIN target_types
+          ON likes.target_type_id = target_types.id
+            AND target_types.name = 'users'
+      GROUP BY profiles.user_id
+      ORDER BY profiles.birthday DESC
+      LIMIT 10
+) AS youngest;
 
--- Обвернём в ещё один запрос и выведем общее количество лайков для молодых пользователей
-SELECT SUM(count_likes) 
-  FROM (
-	SELECT user_id, COUNT(user_id) AS count_likes
-	  FROM (
-		SELECT media.user_id
-		  FROM likes
-			INNER JOIN target_types
-			  ON likes.target_type_id = target_types.id
-			INNER JOIN media
-			  ON likes.target_id = media.id
-		  WHERE target_types.name = 'media'
-		UNION ALL
-		SELECT messages.from_user_id
-		  FROM likes
-			INNER JOIN target_types
-			  ON likes.target_type_id = target_types.id
-			INNER JOIN messages
-			  ON likes.target_id = messages.id
-		  WHERE target_types.name = 'messages'
-		UNION ALL
-		SELECT posts.user_id
-		  FROM likes
-			INNER JOIN target_types
-			  ON likes.target_type_id = target_types.id
-			INNER JOIN posts
-			  ON likes.target_id = posts.id
-		  WHERE target_types.name = 'posts'
-	  ) AS users_likes
-	WHERE user_id IN (SELECT * FROM (SELECT user_id FROM profiles ORDER BY birthday DESC LIMIT 10) AS top_users)
-	GROUP BY user_id
-  ) AS count_users_likes;
--- 44
+-- Вариант с правой таблицей профилей
+SELECT SUM(got_likes) AS total_likes_for_youngest
+  FROM (   
+    SELECT COUNT(target_types.id) AS got_likes 
+      FROM likes
+        INNER JOIN target_types
+          ON likes.target_type_id = target_types.id
+            AND target_types.name = 'users'
+        RIGHT JOIN profiles
+          ON likes.target_id = profiles.user_id
+      GROUP BY profiles.user_id
+      ORDER BY profiles.birthday DESC
+      LIMIT 10
+) AS youngest;
+
+-- Пример вывода данных:
+-- |  total_likes_for_youngest  |
+--    8
 
 
 /* Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети */
