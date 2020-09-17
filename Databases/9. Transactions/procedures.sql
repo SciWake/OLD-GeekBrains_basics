@@ -135,3 +135,48 @@ END//
 CALL numcatalogs(@a)//
 SELECT @a//
 -- 5
+
+
+DELIMITER ;
+/* ОБРАБОТКА ОШИБОК:
+Во время выполнения процедур и функций могут происходить ошибки, поэтому MySQL поддреживает обработчики ошибок. */
+
+-- Сгенерируем собственную ошибку: 
+
+USE shop;
+
+SELECT * FROM catalogs;
+-- Запись с id = 1 уже есть в таблице
+
+-- Добавим новую запись с id = 1:
+INSERT INTO catalogs VALUE (1, 'Процессоры');
+-- Error Code: 1062. Duplicate entry '1' for key 'catalogs.PRIMARY'
+
+
+/* Обработаь код данной ошибки можно с помощью команды DECLARE CONTINUE HANDLER FOR
+Данная команда может использоваться только в теле хранимых процедур / функций. 
+
+Создадим для этого хранимую процедуру insert_to_catalog. Данная хранимая процедура будет вставлять запись в таблицу catalogs.
+В случае неудачи мы перехватываем код 23000 и обрабатывать его при помощи обработчика ошибок. 
+Обработчик будет выставлять значение для переменной error, в случае если переменная error будет определена, 
+процедура будет выводить её содержимое пользователю. */
+
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS insert_to_catalog//
+CREATE PROCEDURE insert_to_catalog (IN id INT, IN name VARCHAR(255))
+BEGIN
+  DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SET @error = 'Ошибка вставки значения';
+  INSERT INTO catalogs VALUES(id, name);
+  IF @error IS NOT NULL THEN
+    SELECT @error;
+  END IF;
+END//
+
+SELECT * FROM catalogs//
+
+CALL insert_to_catalog(4, 'Оперативная память')//
+-- Запись успешно вставилась
+
+CALL insert_to_catalog(1, 'Процессоры')//
+-- Ошибка вставки значения
