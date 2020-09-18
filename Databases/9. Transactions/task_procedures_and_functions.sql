@@ -28,3 +28,49 @@ SELECT HOUR(NOW()) AS Now_hour//
 SELECT hello()//
 -- 'Доброй вечер'
 
+
+/* 2. В таблице products есть два текстовых поля: name с названием товара и description с его описанием. 
+Допустимо присутствие обоих полей или одно из них. Ситуация, когда оба поля принимают неопределенное значение NULL неприемлема. 
+Используя триггеры, добейтесь того, чтобы одно из этих полей или оба поля были заполнены. 
+При попытке присвоить полям NULL-значение необходимо отменить операцию. */
+
+
+-- Создаём таблицу
+DROP TABLE IF EXISTS products//
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Название',
+  description TEXT COMMENT 'Описание',
+  price DECIMAL (11,2) COMMENT 'Цена',
+  catalog_id INT UNSIGNED,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY index_of_catalog_id (catalog_id)
+) COMMENT = 'Товарные позиции'//
+
+-- Тригер для генерации ошибки в случае, когда оба поля принимаю неопределенное значение NULL (INSERT)
+DROP TRIGGER IF EXISTS insert_products//
+CREATE TRIGGER insert_products BEFORE INSERT ON products
+FOR EACH ROW BEGIN
+  IF NEW.name IS NULL AND NEW.description IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Name and description is NULL';
+  END IF;
+END//
+
+-- Тригер для генерации ошибки в случае, когда оба поля принимаю неопределенное значение NULL (UPDATE)
+DROP TRIGGER IF EXISTS update_products//
+CREATE TRIGGER update_products BEFORE UPDATE ON products
+FOR EACH ROW BEGIN
+  IF NEW.name IS NULL AND NEW.description IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Name and description is NULL';
+  END IF;
+END//
+
+
+-- Проверяем работу тригера
+INSERT INTO products
+  (name, description, price, catalog_id)
+VALUES
+  (NULL, NULL, 7890.00, 1);
