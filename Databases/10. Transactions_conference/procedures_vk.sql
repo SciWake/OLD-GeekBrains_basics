@@ -163,3 +163,82 @@ SELECT * FROM profiles WHERE country = 'Russia' ORDER BY birthday;
 
 -- В этом случае нам нужно будет создать индекс в порядке
 -- WHERE ORDER BY
+
+
+
+-- ОКОННЫЕ ФУНКЦИИ
+
+-- Задача
+-- Найти сколько занимают места медиафайлы в разрезе типов в процентном соотношении
+
+-- Решаем традиционным способом, применяя агрегатные функции
+SELECT media_types.name, 
+  SUM(media.size) AS total_by_type,
+  (SELECT SUM(size) FROM media) AS total_size,
+  SUM(media.size)/(SELECT SUM(size) FROM media) * 100 AS "%%" 
+    FROM media
+      JOIN media_types
+        ON media.media_type_id = media_types.id
+    GROUP BY media.media_type_id;
+
+
+-- Реализация используя агрегатные функции как оконные
+SELECT DISTINCT media_types.name, 
+  SUM(media.size) OVER(PARTITION BY media.media_type_id) AS total_by_type,
+  SUM(media.size) OVER() AS total,
+  SUM(media.size) OVER(PARTITION BY media.media_type_id) / SUM(media.size) OVER() * 100 AS "%%"
+    FROM media
+      JOIN media_types
+        ON media.media_type_id = media_types.id;
+
+
+-- Расширяем вывод
+SELECT DISTINCT media_types.name,
+  AVG(media.size) OVER(PARTITION BY media.media_type_id) AS average,
+  MIN(media.size) OVER(PARTITION BY media.media_type_id) AS min,
+  MAX(media.size) OVER(PARTITION BY media.media_type_id) AS max,
+  SUM(media.size) OVER(PARTITION BY media.media_type_id) AS total_by_type,
+  SUM(media.size) OVER() AS total,
+  SUM(media.size) OVER(PARTITION BY media.media_type_id) / SUM(media.size) OVER() * 100 AS "%%"
+    FROM media
+      JOIN media_types
+        ON media.media_type_id = media_types.id;
+
+-- Выносим окно отдельно
+SELECT DISTINCT media_types.name,
+  AVG(media.size) OVER w AS average,
+  MIN(media.size) OVER w AS min,
+  MAX(media.size) OVER w AS max,
+  SUM(media.size) OVER w AS total_by_type,
+  SUM(media.size) OVER() AS total,
+  SUM(media.size) OVER w / SUM(media.size) OVER() * 100 AS "%%"
+    FROM (media
+      JOIN media_types
+        ON media.media_type_id = media_types.id)
+        WINDOW w AS (PARTITION BY media.media_type_id);
+
+
+-- Оконные функции не сворачивают вывод
+-- Убираем DISTINCT
+SELECT media_types.name,
+  AVG(media.size) OVER w AS average,
+  MIN(media.size) OVER w AS min,
+  MAX(media.size) OVER w AS max,
+  SUM(media.size) OVER w AS total_by_type,
+  SUM(media.size) OVER() AS total,
+  SUM(media.size) OVER w / SUM(media.size) OVER() * 100 AS "%%"
+    FROM (media
+      JOIN media_types
+        ON media.media_type_id = media_types.id)
+        WINDOW w AS (PARTITION BY media.media_type_id);
+
+
+-- Применяем чистые оконные функции
+SELECT user_id, city, birthday,
+  ROW_NUMBER() OVER w AS 'row_number',
+  FIRST_VALUE(city) OVER w AS 'first',
+  LAST_VALUE(city) OVER(PARTITION BY LEFT(birthday, 3)
+    RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS 'last',
+  NTH_VALUE(city, 2) OVER w AS 'second'
+    FROM profiles
+      WINDOW w AS (PARTITION BY LEFT(birthday, 3) ORDER BY birthday);
