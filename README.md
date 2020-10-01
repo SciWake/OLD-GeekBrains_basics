@@ -2,20 +2,20 @@
 
 Внутри данного репозитория расположены пройденные курсы, которые отфильтрованы по директориям.
 
-## [`Algorithms-in-python`](https://github.com/bimastics/Main/tree/master/Algorithms-in-python) 
+## :snake: [`Algorithms-in-python`](https://github.com/bimastics/Main/tree/master/Algorithms-in-python) 
 
 Алгоритмы и структуры данных на Python. Интерактивный курс
 
 Курс закладывает базу программирования на языке Python и «прокачивает» алгоритмическое мышление. Курс учит понимать фундаментальные алгоритмы и использовать их для решения практических задач. Знакомит с методами анализа данных на Python и всеми необходимыми библиотеками.
 
-## [`Databases`](https://github.com/bimastics/Main/tree/master/Databases)
+## :mailbox: [`Databases`](https://github.com/bimastics/Main/tree/master/Databases)
 
 Базы данных
 
 Основаня часть курса заложена на работе с MySQL – системой управления БД, зарекомендовавшей себя на популярных крупных проектах. Пошагово изучается проектирование баз данных и работа с ними.
 Курс знакомит и с альтернативными БД: MongoDB, Redis, ElasticSearch и ClickHouse.
 
-## [`Linear-algebra`](https://github.com/bimastics/Main/tree/master/Linear-algebra)
+## :triangular_ruler: [`Linear-algebra`](https://github.com/bimastics/Main/tree/master/Linear-algebra)
 
 Линейная алгебра
 
@@ -28,19 +28,19 @@
 
 Курс знакомит с важными темами в линейной алгебре, которые потребуются на курсах компьютерного зрения, машинного обучения.
 
-## [`Introduction-to-mathematics`](https://github.com/bimastics/Main/tree/master/Introduction-to-mathematics/1.%20Elementary%20algebra)
+## :hatching_chick: [`Introduction-to-mathematics`](https://github.com/bimastics/Main/tree/master/Introduction-to-mathematics/1.%20Elementary%20algebra)
 
 Введение в высшую математику
 
 Подготовительный курс по математике, затрагивает школьную базу и основы высшей математики. Позволяет закрепить знания в области математики.
 
-## [`Mathematical-analysis`](https://github.com/bimastics/Main/tree/master/Mathematical-analysis)
+## :chicken: [`Mathematical-analysis`](https://github.com/bimastics/Main/tree/master/Mathematical-analysis)
 
 Математический анализ
 
 Курс предстваляем из себя поэтапное прохождение тем высшей математики. Является хорошим введением в каждую существующих тем, позволяя разобраться в основах.
 
-## [`Statistics`](https://github.com/bimastics/Main/tree/master/Statistics)
+## :game_die: [`Statistics`](https://github.com/bimastics/Main/tree/master/Statistics)
 
 Теория вероятностей и математическая статистика
 
