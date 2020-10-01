@@ -28,7 +28,7 @@
 
 Курс знакомит с важными темами в линейной алгебре, которые потребуются на курсах компьютерного зрения, машинного обучения.
 
-## :hatching_chick: [`Introduction-to-mathematics`](https://github.com/bimastics/Main/tree/master/Introduction-to-mathematics/1.%20Elementary%20algebra)
+## :hatching_chick: [`Introduction-to-mathematics`](https://github.com/bimastics/Main/tree/master/Introduction-to-mathematics)
 
 Введение в высшую математику
 
