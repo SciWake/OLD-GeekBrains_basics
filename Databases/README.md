@@ -2,7 +2,7 @@
 
 # Уроки:
 
-### [`2. SQL`](https://github.com/bimastics/Main/tree/master/Databases/2.%20SQL) 
+### :new_moon: [`2. SQL`](https://github.com/bimastics/Main/tree/master/Databases/2.%20SQL) 
 
 **Язык запросов SQL | Итерактивный курс**
 
@@ -18,7 +18,7 @@ __Файлы урока:__
 * **[`task_2.sql`](https://github.com/bimastics/Main/blob/master/Databases/2.%20SQL/task_2.sql)** - Домашняя работа.
 
 
-### [`3. Designing_the_database`](https://github.com/bimastics/Main/tree/master/Databases/3.%20Designing_the_database) 
+### :waxing_crescent_moon: [`3. Designing_the_database`](https://github.com/bimastics/Main/tree/master/Databases/3.%20Designing_the_database) 
 
 **Урок 3. Вебинар. Введение в проектирование БД**
 
@@ -27,7 +27,7 @@ __Файлы урока:__
 * **[`database_structure.sql`](https://github.com/bimastics/Main/blob/master/Databases/3.%20Designing_the_database/database_structure.sql)** - Структура БД представленна в виде SQL-кода;
 
 
-### [`4. CRUD`](https://github.com/bimastics/Main/tree/master/Databases/4.%20CRUD) 
+### :first_quarter_moon: [`4. CRUD`](https://github.com/bimastics/Main/tree/master/Databases/4.%20CRUD) 
 
 **Урок 4. Вебинар. CRUD-операции**
 
@@ -37,7 +37,7 @@ __Файлы урока:__
 
 
 
-### [`5. Data_aggregation`](https://github.com/bimastics/Main/tree/master/Databases/5.%20Data_aggregation) 
+### :waxing_gibbous_moon: [`5. Data_aggregation`](https://github.com/bimastics/Main/tree/master/Databases/5.%20Data_aggregation) 
 
 **Операторы, фильтрация, сортировка и ограничение | Итерактивный курс**
 
@@ -67,7 +67,7 @@ __Файлы урока:__
 
 
 
-### [`6. Data_aggregation_conference`](https://github.com/bimastics/Main/tree/master/Databases/6.%20Data_aggregation_conference) 
+### :full_moon: [`6. Data_aggregation_conference`](https://github.com/bimastics/Main/tree/master/Databases/6.%20Data_aggregation_conference) 
 
 **Урок 6. Вебинар. Операторы, фильтрация, сортировка и ограничение. Агрегация данных**
 
@@ -80,7 +80,7 @@ __Файлы урока:__
 * **[`work_with_data.sql`]()** - Запросы к базе данных.
 
 
-### [`7. Complex_query`](https://github.com/bimastics/Main/tree/master/Databases/7.%20Complex_query) 
+### :waning_gibbous_moon: [`7. Complex_query`](https://github.com/bimastics/Main/tree/master/Databases/7.%20Complex_query) 
 
 **Сложные запросы | Итерактивный курс**
 
@@ -96,7 +96,7 @@ __Файлы урока:__
 
 
 
-### [`8. Complex_query_conference`](https://github.com/bimastics/Main/tree/master/Databases/8.%20Complex_query_conference) 
+### :last_quarter_moon: [`8. Complex_query_conference`](https://github.com/bimastics/Main/tree/master/Databases/8.%20Complex_query_conference) 
 
 **Урок 8. Вебинар. Сложные запросы**
 
@@ -105,7 +105,7 @@ __Файлы урока:__
 * **[`work_with_data_join.sql`](https://github.com/bimastics/Main/blob/master/Databases/8.%20Complex_query_conference/work_with_data_join.sql)** - Запросы к базе данных.
 
 
-### [`9. Transactions`](https://github.com/bimastics/Main/tree/master/Databases/9.%20Transactions) 
+### :waning_crescent_moon: [`9. Transactions`](https://github.com/bimastics/Main/tree/master/Databases/9.%20Transactions) 
 
 **Транзакции, переменные, представления | Итерактивный курс**
 
@@ -143,7 +143,7 @@ __Файлы урока:__
 * **[`task_procedures_and_functions.sql`](https://github.com/bimastics/Main/blob/master/Databases/9.%20Transactions/task_procedures_and_functions.sql)** - Домашняя работа;
 * **[`triggers.sql`](https://github.com/bimastics/Main/blob/master/Databases/9.%20Transactions/triggers.sql)** - Триггеры.
 
-### [`10. Transactions_conference`](https://github.com/bimastics/Main/tree/master/Databases/10.%20Transactions_conference) 
+### :full_moon_with_face: [`10. Transactions_conference`](https://github.com/bimastics/Main/tree/master/Databases/10.%20Transactions_conference) 
 
 **Урок 10. Вебинар. Транзакции, переменные, представления. Администрирование. Хранимые процедуры и функции, триггеры**
 
