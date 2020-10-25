@@ -2,11 +2,13 @@
 
 Внутри данного репозитория расположены пройденные курсы, которые отфильтрованы по директориям.
 
+
 ## :snake: [`Algorithms-in-python`](https://github.com/bimastics/Main/tree/master/Algorithms-in-python) 
 
 Алгоритмы и структуры данных на Python. Интерактивный курс
 
 Курс закладывает базу программирования на языке Python и «прокачивает» алгоритмическое мышление. Курс учит понимать фундаментальные алгоритмы и использовать их для решения практических задач. Знакомит с методами анализа данных на Python и всеми необходимыми библиотеками.
+
 
 ## :mailbox: [`Databases`](https://github.com/bimastics/Main/tree/master/Databases)
 
@@ -14,6 +16,7 @@
 
 Основаня часть курса заложена на работе с MySQL – системой управления БД, зарекомендовавшей себя на популярных крупных проектах. Пошагово изучается проектирование баз данных и работа с ними.
 Курс знакомит и с альтернативными БД: MongoDB, Redis, ElasticSearch и ClickHouse.
+
 
 ## :triangular_ruler: [`Linear-algebra`](https://github.com/bimastics/Main/tree/master/Linear-algebra)
 
@@ -28,17 +31,13 @@
 
 Курс знакомит с важными темами в линейной алгебре, которые потребуются на курсах компьютерного зрения, машинного обучения.
 
-## :hatching_chick: [`Introduction-to-mathematics`](https://github.com/bimastics/Main/tree/master/Introduction-to-mathematics)
-
-Введение в высшую математику
-
-Подготовительный курс по математике, затрагивает школьную базу и основы высшей математики. Позволяет восстановить и закрепить знания для последующих курсов.
 
 ## :chicken: [`Mathematical-analysis`](https://github.com/bimastics/Main/tree/master/Mathematical-analysis)
 
 Математический анализ
 
 Курс предстваляем из себя поэтапное прохождение основ высшей математики, без последующего углубления в темы. Разрабатывает хорошую базу, которую можно развивать далше по учебникам. 
+
 
 ## :game_die: [`Statistics`](https://github.com/bimastics/Main/tree/master/Statistics)
 
