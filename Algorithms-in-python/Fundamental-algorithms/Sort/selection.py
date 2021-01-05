@@ -15,6 +15,8 @@
 mass = [x for x in reversed([i for i in range(1, 20)])]
 
 
+# РЕАЛИЗАЦИЯ 1
+
 def selection_sort(array):
     for i in range(len(array) - 1):
         min_index = i
@@ -25,5 +27,33 @@ def selection_sort(array):
 
         array[i], array[min_index] = array[min_index], array[i]
 
+
 # python -m timeit -n 1000 "import selection" "selection.selection_sort(selection.mass)"
-# 1000 loops, best of 5: 20.2 usec per loop
+# 1000 loops, best of 5: 28 usec per loop
+
+
+# РЕАЛИЗАЦИЯ 2
+'''
+Второе соображение для оптимизации метода простого обмена основано на таком утверждении: если за полный проход в 
+массиве не сделано ни одной перестановки, то его можно считать отсортированным. Это позволяет значительно сократить 
+время в случаях, когда более или менее повезло с исходными данными. Для такой реализации потребовалось находить не
+наименьший элемент, а наибольший, что позволило упросить написание кода.
+'''
+
+
+def selection_sort_2(array):
+    j = len(array) - 1
+    swapped = True
+    while swapped:
+        swapped = False
+        max_index = j
+        for i in range(0, j):
+            if array[i] > array[max_index]:
+                max_index = i
+                swapped = True
+
+        array[j], array[max_index] = array[max_index], array[j]
+        j -= 1
+
+# python -m timeit -n 1000 "import selection" "selection.selection_sort_2(selection.mass)"
+# 1000 loops, best of 5: 2.8 usec per loop
