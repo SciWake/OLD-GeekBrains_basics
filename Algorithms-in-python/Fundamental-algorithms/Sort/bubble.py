@@ -25,7 +25,12 @@
 Впрочем, достаточно сделать n - 1 проход, потому что когда все числа кроме одного будут на своих местах, последнее тоже 
 само собой окажется на своем месте. 
 '''
-mass = [x for x in reversed([i for i in range(1, 20)])]
+# Генерация массива
+import random
+
+size = 20
+mass = [i for i in range(size)]
+random.shuffle(mass)
 
 
 def bubble_1(array):
@@ -36,7 +41,7 @@ def bubble_1(array):
 
 
 # python -m timeit -n 1000 "import bubble" "bubble.bubble_1(bubble.mass)"
-# 1000 loops, best of 5: 35.1 usec per loop
+# 1000 loops, best of 5: 52.6 usec per loop
 
 
 # РЕАЛИЗАЦИЯ 2
@@ -60,7 +65,7 @@ def bubble_2(array):
 
 
 # python -m timeit -n 1000 "import bubble" "bubble.bubble_2(bubble.mass)"
-# 1000 loops, best of 5: 21.3 usec per loop
+# 1000 loops, best of 5: 32.9 usec per loop
 
 
 # РЕАЛИЗАЦИЯ 3
@@ -75,7 +80,7 @@ def bubble_2(array):
 '''
 
 
-def bubble_result(array):
+def bubble_sort(array):
     j = len(array) - 1
     swapped = True
     while swapped:
@@ -86,5 +91,5 @@ def bubble_result(array):
                 swapped = True
         j -= 1
 
-# python -m timeit -n 1000 "import bubble" "bubble.bubble_result(bubble.mass)"
-# 1000 loops, best of 5: 2.15 usec per loop
+# python -m timeit -n 1000 "import bubble" "bubble.bubble_sort(bubble.mass)"
+# 1000 loops, best of 5: 3.23 usec per loop
