@@ -12,7 +12,12 @@
 Далее, повторяем эти действия до полной сортировки. На каждом этапе внешнего цикла, левая часть отсортированного массива
 будет увиличиваться на 1 элемент, а права уменьшаться.
 '''
-mass = [x for x in reversed([i for i in range(1, 20)])]
+# Генерация массива
+import random
+
+size = 20
+mass = [i for i in range(size)]
+random.shuffle(mass)
 
 
 # РЕАЛИЗАЦИЯ 1
@@ -29,7 +34,7 @@ def selection_sort(array):
 
 
 # python -m timeit -n 1000 "import selection" "selection.selection_sort(selection.mass)"
-# 1000 loops, best of 5: 28 usec per loop
+# 1000 loops, best of 5: 30.3 usec per loop
 
 
 # РЕАЛИЗАЦИЯ 2
@@ -56,4 +61,4 @@ def selection_sort_2(array):
         j -= 1
 
 # python -m timeit -n 1000 "import selection" "selection.selection_sort_2(selection.mass)"
-# 1000 loops, best of 5: 2.8 usec per loop
+# 1000 loops, best of 5: 2.9 usec per loop
