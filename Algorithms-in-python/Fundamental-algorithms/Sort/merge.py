@@ -47,5 +47,56 @@ def merge_sort(array):
             j += 1
             k += 1
 
+
 # python -m timeit -n 1000 "import merge" "merge.merge_sort(merge.mass)"
 # 1000 loops, best of 5: 52.2 usec per loop
+
+
+# РЕАЛИЗАЦИЯ 2
+
+def merge(left_list, right_list):
+    sorted_list = []
+    left_index = right_index = 0
+
+    left_length, right_length = len(left_list), len(right_list)
+
+    for _ in range(left_length + right_length):
+        if left_index < left_length and right_index < right_length:
+
+            if left_list[left_index] <= right_list[right_index]:
+                sorted_list.append(left_list[left_index])
+                left_index += 1
+            else:
+                sorted_list.append(right_list[right_index])
+                right_index += 1
+
+        # Если достигнут конец левого списка, элементы правого списка
+        # добавляем в конец результирующего списка
+        elif left_index == left_length:
+            sorted_list.append(right_list[right_index])
+            right_index += 1
+        # Если достигнут конец правого списка, элементы левого списка
+        # добавляем в отсортированный массив
+        elif right_index == right_length:
+            sorted_list.append(left_list[left_index])
+            left_index += 1
+
+    return sorted_list
+
+
+def merge_sort_2(nums):
+    # Возвращаем список, если он состоит из одного элемента
+    if len(nums) <= 1:
+        return nums
+
+    mid = len(nums) // 2
+
+    # Сортируем и объединяем подсписки
+    left_list = merge_sort_2(nums[:mid])
+    right_list = merge_sort_2(nums[mid:])
+
+    # Объединяем отсортированные списки в результирующий
+    return merge(left_list, right_list)
+
+# python -m timeit -n 1000 "import merge" "merge.merge_sort_2(merge.mass)"
+# 1000 loops, best of 5: 59.3 usec per loop
