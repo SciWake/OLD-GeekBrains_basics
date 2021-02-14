@@ -23,7 +23,7 @@ random.shuffle(mass)
 # РЕАЛИЗАЦИЯ 1
 
 def selection_sort(array):
-    for i in range(len(array) - 1):
+    for i in range(len(array)):
         min_index = i
 
         for j in range(i + 1, len(array)):
